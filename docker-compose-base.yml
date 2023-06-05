@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   notifications_db:
@@ -30,6 +30,13 @@ services:
       - ./.env
     depends_on:
       - "notifications_db"
+
+  fastapi:
+    build:
+      context: ./.
+      dockerfile: src/Dockerfile
+    env_file:
+      - ./.env
 
 volumes:
     pgdata:
