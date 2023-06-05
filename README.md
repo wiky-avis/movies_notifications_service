@@ -1,5 +1,5 @@
 # Movies Notifications Service
-Online cinema service for notifications. Contains admin panel, api and senders.
+Online cinema service for notifications. Contains admin panel, api and senders
 
 ## Contributors
 
