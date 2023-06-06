@@ -6,10 +6,6 @@ services:
       - "6666:5432"
 
   fastapi:
-    image: fastapi-image
-    extends:
-      file: docker-compose-base.yml
-      service: fastapi
     ports:
       - "8000:8000"
 
