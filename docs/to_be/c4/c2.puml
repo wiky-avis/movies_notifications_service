@@ -1,0 +1,60 @@
+@startuml
+
+!define ICONURL https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v2.4.0
+!includeurl ICONURL/common.puml
+!include <C4/C4_Container>
+!include <C4/C4_Context>
+!include ICONURL/devicons/postgresql.puml
+!includeurl ICONURL/material/email.puml
+!includeurl ICONURL/material/queue.puml
+!includeurl ICONURL/material/schedule.puml
+skinparam backgroundColor MOTIVATION
+
+title [C2]: TO BE
+
+HIDE_STEREOTYPE()
+SHOW_PERSON_OUTLINE()
+
+Person(Marketer, "Маркетолог", "Отправляет коммуникации")
+
+System_Boundary(services, "Other services") {
+    Container(auth_service, "Auth Service", "Сервис аутентификации")
+    Container(ugc_service, "UGC Service", "Сервис для отслеживания активности пользователя")
+}
+System_Boundary(notifications, "Нотификации") {
+    Container(notifications_service, "Notifications Service", "Сервис для отправки коммуникаций пользователям")
+    Container(notifications_admin_panel, "Notifications Admin Panel", "Админ панель для регистрации и отправки коммуникаций")
+    Container(notifications_generator, "Communications generator", "Генерирует регулярные отправки", $sprite="schedule")
+    Container(send_daemon, "Обработчик событий отправки", "Готовит сообщения к отправке")
+    Container(retry_daemon, "Обработчик ретраев и повторных отправок", "Обрабатывает ошибки и ставит повторные отправки")
+    Container(email_consumer, "Воркер по отправке коммуникаций", "Заполняет шаблон и отправляет Email провайдеру")
+    System_Boundary(rabbitmq, "RabbitMQ") {
+        Container(process_queue, "Очередь для обработки", "notification_id, campaing_id")
+        Container(send_queue, "Очередь для отправки", "notification_id, campaing_id")
+        Container(retry_queue, "Очередь повторной проверки", "notification_id, campaing_id")
+        Container(error_queue, "Очередь с неудавшимися отправками", "notification_id, campaing_id")
+    }
+    Container(postgresSQL, "PostgreSQL", "БД коммуникаций", $sprite="postgresql")
+}
+Container(email_provider, "Email provider", "Внешний сервис по отправке имейлов", $sprite="email")
+
+[Marketer] --> [notifications_admin_panel]
+Rel(notifications_admin_panel, notifications_service, "Разовая отправка коммуникаций")
+Rel(notifications_admin_panel, postgresSQL, "Заведение шаблона")
+Rel(services, notifications_service, "Запросы на отправку коммуникаций")
+Rel(notifications_generator, notifications_service, "Регулярная отправка коммуникаций")
+Rel(notifications_service, process_queue, "Сообщение в очередь на обработку с notification_id")
+Rel(process_queue, send_daemon, "Обрабатывает и проверяет сообщения")
+Rel(postgresSQL, send_daemon, "Шаблон коммуникации")
+Rel(send_daemon, send_queue, "Успешные сообщения передает в очередь на отправку")
+Rel(retry_queue, retry_daemon, "Читает отправки с ошибкой")
+Rel(postgresSQL, retry_daemon, "Шаблон коммуникации")
+Rel(retry_daemon, send_queue, "Заново кладет отправки в очередь")
+Rel(retry_daemon, error_queue, "Неудавшиеся отпарвки")
+Rel(send_queue, email_consumer, "Сообщения для отправки")
+Rel(postgresSQL, email_consumer, "Шаблон коммуникации")
+Rel(email_consumer, email_provider, "Данные для отправки")
+Rel(email_consumer, retry_queue, "Отправки с ошибками")
+Rel(email_consumer, postgresSQL, "Статусы отправки")
+
+@enduml

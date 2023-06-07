@@ -14,8 +14,13 @@ mypy:
 
 linters: isort black flake8 mypy
 
-unit-tests:
-	python3 -m pytest tests/src/unit
+poetry-export:
+	poetry export --without-hashes --with dev -f requirements.txt -o .github/requirements/requirements.txt
+
+unit-tests-admin-panel:
+	python3 -m pytest admin_panel/tests/src/unit
+
+unit-tests: unit-tests-admin-panel
 
 up-prod:
 	docker-compose -f docker-compose-base.yml -f docker-compose-prod.yml up --build
