@@ -28,6 +28,8 @@ services:
     command: bash -c "yoyo apply --database ${DATABASE_URL} /notifications_db/migrations -b"
     env_file:
       - ./.env
+    depends_on:
+      - "notifications_db"
 
 volumes:
     pgdata:
