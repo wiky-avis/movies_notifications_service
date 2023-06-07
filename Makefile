@@ -17,19 +17,19 @@ unit-tests:
 	python3 -m pytest tests/src/unit
 
 up-prod:
-	docker-compose -f docker-compose-prod.yml up --build
+	docker-compose -f docker-compose-base.yml -f docker-compose-prod.yml up --build
 
 up-prod-d:
-	docker-compose -f docker-compose-prod.yml up -d --build	
+	docker-compose -f docker-compose-base.yml -f docker-compose-prod.yml up -d --build
 
 down-prod: 
-	docker-compose -f docker-compose-prod.yml down
+	docker-compose -f docker-compose-base.yml -f docker-compose-prod.yml down
 
 up-local:
-	docker-compose -f docker-compose-local.yml up --build
+	docker-compose -f docker-compose-base.yml -f docker-compose-local.yml up --build
 
 up-local-d:
-	docker-compose -f docker-compose-local.yml up -d --build
+	docker-compose -f docker-compose-base.yml -f docker-compose-local.yml up -d --build
 
 down-local:
-	docker-compose -f docker-compose-local.yml down -v
+	docker-compose -f docker-compose-base.yml -f docker-compose-local.yml down -v

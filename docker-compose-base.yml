@@ -1,50 +1,42 @@
-version: '3.4'
+version: '3.8'
+
 services:
-
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.3.2
-    hostname: zookeeper
-    container_name: zookeeper
+  notifications_db:
+    image: postgres:15
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    volumes:
-      - ./data/zookeeper/data:/data
-      - ./data/zookeeper/datalog:/datalog
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PGDATA: /var/lib/postgresql/data
+    env_file:
+      - ./.env
+    expose:
+      - "${POSTGRES_PORT}"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d ${POSTGRES_DB} -U ${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  broker:
-    image: confluentinc/cp-kafka:7.3.2
-    hostname: broker
-    container_name: broker
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://broker:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-    volumes:
-      - ./data/broker/data:/var/lib/broker/data
-  
-  clickhouse-node1:
-    image: yandex/clickhouse-server:20.3
-    container_name: clickhouse-node1
-    hostname: clickhouse-node1
-    volumes:
-      - ./data/db/ddl/setup_clickhouse.sql:/docker-entrypoint-initdb.d/setup_clickhouse.sql
-      - ./data/db/node1:/etc/clickhouse-server
-
-  clickhouse-node2:
-    image: yandex/clickhouse-server:20.3
-    container_name: clickhouse-node2
-    hostname: clickhouse-node2
-    volumes:
-      - ./data/db/node2:/etc/clickhouse-server
+  migration:
+    build:
+      context: ./.
+      dockerfile: notifications_db/Dockerfile
+    command: bash -c "yoyo apply --database ${DATABASE_URL} /notifications_db/migrations -b"
+    env_file:
+      - ./.env
+    depends_on:
+      - "notifications_db"
 
   fastapi:
-    build: 
+    build:
       context: ./.
       dockerfile: src/Dockerfile
     env_file:
       - ./.env
+
+volumes:
+    pgdata:
