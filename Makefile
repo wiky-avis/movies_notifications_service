@@ -8,7 +8,7 @@ isort:
 	isort .
 
 mypy:
-	mypy src --explicit-package-bases
+	mypy notifications_api --explicit-package-bases
 
 
 linters: isort black flake8 mypy
