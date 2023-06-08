@@ -8,6 +8,6 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - /tmp/logs/nginx/:/var/log/nginx/
     depends_on:
-      - fastapi
+      - notifications_api
     ports:
       - 80:80

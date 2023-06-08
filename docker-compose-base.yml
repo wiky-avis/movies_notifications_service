@@ -31,10 +31,10 @@ services:
     depends_on:
       - "notifications_db"
 
-  fastapi:
+  notifications_api:
     build:
       context: ./.
-      dockerfile: src/Dockerfile
+      dockerfile: notifications_api/Dockerfile
     env_file:
       - ./.env
 
