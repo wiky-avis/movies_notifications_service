@@ -6,6 +6,7 @@ from asyncpg import Pool
 
 from notifications_api.src.settings import db_settings
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -20,9 +21,7 @@ class DbConnector:
     @staticmethod
     async def connect():
         try:
-            DbConnector.pool = await asyncpg.create_pool(
-                db_settings.db_url
-            )
+            DbConnector.pool = await asyncpg.create_pool(db_settings.db_url)
         except Exception:
             logger.error("Db is not initialized", exc_info=True)
 
