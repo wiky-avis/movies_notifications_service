@@ -33,3 +33,5 @@ async def create_delivery(
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Token required")
     if token_header not in NOTIFICATIONS_SRV_TOKENS:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Forbidden")
+
+    return "Ok"

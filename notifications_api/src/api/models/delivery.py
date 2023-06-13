@@ -19,7 +19,7 @@ class ObjectParameter(BaseModel):
 class DeliveryModel(ORDJSONModelMixin):
     template_id: int
     recipient: Recipient
-    parameters: dict[ObjectParameter]  # type: ignore[type-arg]
+    parameters: list[ObjectParameter]
     channel: str
     type_: str = Field(alias="type")
     sender: str

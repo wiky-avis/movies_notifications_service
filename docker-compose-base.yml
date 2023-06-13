@@ -27,9 +27,9 @@ services:
     build:
       context: ./.
       dockerfile: notifications_db/Dockerfile
-    command: bash -c "yoyo apply --database ${DATABASE_URL} /opt/app/notifications_db/migrations -b"
-    env_file:
-      - ./.env
+    environment:
+      - DATABASE_URL=postgresql://app:123qwe@db:5432/notifications
+    command: bash -c "yoyo apply --database ${DATABASE_URL} /notifications_db/migrations -b"
     depends_on:
       - "db"
     networks:
