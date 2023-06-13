@@ -1,18 +1,15 @@
 FROM --platform=linux/amd64 python:3.11-buster
 
-WORKDIR /opt/app
-
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONPATH "${PYTHONPATH}:/opt/app"
-
-COPY pyproject.toml .
+WORKDIR /opt/app/notifications_api
 
 RUN pip3 install poetry==1.4.2 --no-cache-dir
-RUN poetry config virtualenvs.create false && poetry install
+
+COPY notifications_api/poetry.lock notifications_api/pyproject.toml /opt/app/notifications_api/
+
+RUN poetry config experimental.new-installer false && poetry config virtualenvs.create false && poetry install --no-root
 
 COPY . .
 
-RUN chmod +x src/run.sh
+RUN chmod +x notifications_api/run.sh
 
-ENTRYPOINT ["/opt/app/src/run.sh"]
+ENTRYPOINT ["notifications_api/run.sh"]

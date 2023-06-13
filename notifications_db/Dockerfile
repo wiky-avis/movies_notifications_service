@@ -1,9 +1,9 @@
-FROM python:3.10-slim
+FROM --platform=linux/amd64 python:3.11-buster
 
-ENV LANG C.UTF-8
+WORKDIR /opt/app
 
 RUN mkdir /notifications_db
-RUN pip install psycopg2-binary yoyo-migrations==8.2.0
+RUN pip3 install psycopg2-binary yoyo-migrations==8.2.0
 WORKDIR /notifications_db
 
-ADD ./notifications_db/migrations ./migrations/
+COPY ./notifications_db/migrations ./migrations/
