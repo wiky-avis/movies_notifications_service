@@ -22,7 +22,7 @@ class NotificationsRepository:
                 data.recipient,
                 data.parameters,
                 data.channel,
-                data._type,
+                data.type_,
                 data.sender,
             )
         except Exception:
