@@ -24,7 +24,15 @@ async def create_delivery(
     token_header: Optional[str] = Header(
         None, alias=token_settings.token_header
     ),
-    body: DeliveryModel = Body(...),
+    body: DeliveryModel = Body(
+        example='{"template_id": 123,'
+        '"recipient": {"user_id": "gf2536254"},'
+        '"parameters": ['
+        '{"name": "subject", "value": "Приветственное письмо"},'
+        '{"name": "username", "value": "vasya"}'
+        "],"
+        '"channel": "email", "type": "not_at_night", "sender": "ugs_service"}',
+    ),
     notifications_service: NotificationsService = Depends(
         Provide[Container.notifications_service]
     ),
@@ -34,4 +42,6 @@ async def create_delivery(
     if token_header not in NOTIFICATIONS_SRV_TOKENS:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Forbidden")
 
-    return "Ok"
+    print(body)
+
+    return body.dict()
