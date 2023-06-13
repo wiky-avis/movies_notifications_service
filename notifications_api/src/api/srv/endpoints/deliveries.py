@@ -11,7 +11,7 @@ router = APIRouter()
 @router.post(
     "/v1/deliveries",
 )
-async def create_deliveries(
+async def create_delivery(
     token_header: Optional[str] = Header(None, alias=token_settings.token_header),
     db=Depends(get_db),
 ):
