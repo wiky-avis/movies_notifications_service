@@ -16,6 +16,7 @@ steps = [
             template_id bigint NOT NULL,
             recipient jsonb NOT NULL,
             parameters jsonb NOT NULL,
+            channel varchar NOT NULL,
             type varchar NOT NULL,
             excluded boolean DEFAULT FALSE,
             exclude_reason varchar NULL,
