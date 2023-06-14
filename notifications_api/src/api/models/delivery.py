@@ -41,3 +41,7 @@ class DeliveryModel(ORDJSONModelMixin):
     exclude_reason: Optional[str]
     created_dt: Optional[datetime]
     updated_dt: Optional[datetime]
+
+
+class DeliveryResponse(ORDJSONModelMixin):
+    delivery_id: Optional[int]

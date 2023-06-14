@@ -3,7 +3,10 @@ from http import HTTPStatus
 from fastapi import HTTPException
 from starlette.responses import JSONResponse
 
-from notifications_api.src.api.models.delivery import DeliveryModel
+from notifications_api.src.api.models.delivery import (
+    DeliveryModel,
+    DeliveryResponse,
+)
 from notifications_api.src.common.exceptions import DatabaseError
 from notifications_api.src.common.repositories.notifications import (
     NotificationsRepository,
@@ -22,4 +25,6 @@ class NotificationsService:
                 status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
                 detail="Failed to create a new delivery.",
             )
-        return JSONResponse(content={"delivery_id": delivery_id})
+        return JSONResponse(
+            content=DeliveryResponse(delivery_id=delivery_id).dict()
+        )
