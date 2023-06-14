@@ -10,9 +10,9 @@ from notifications_api.src.api.models.base import ORDJSONModelMixin
 
 class DeliveryType(str, Enum):
     # сразу
-    CREATED = "immediately"
+    IMMEDIATELY = "immediately"
     # не ночью
-    SENT = "not_night"
+    NOT_NIGHT = "not_night"
 
 
 class DeliveryChannel(str, Enum):
