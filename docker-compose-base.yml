@@ -27,9 +27,9 @@ services:
     build:
       context: ./.
       dockerfile: notifications_db/Dockerfile
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
     command: bash -c "yoyo apply --database ${DATABASE_URL} /notifications_db/migrations -b"
+    env_file:
+      - ./.env
     depends_on:
       - "db"
     networks:

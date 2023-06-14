@@ -31,7 +31,7 @@ async def create_delivery(
         '{"name": "subject", "value": "Приветственное письмо"},'
         '{"name": "username", "value": "vasya"}'
         "],"
-        '"channel": "email", "type": "not_at_night", "sender": "ugs_service"}',
+        '"channel": "email", "type": "not_night", "sender": "ugc_service"}',
     ),
     notifications_service: NotificationsService = Depends(
         Provide[Container.notifications_service]
@@ -42,6 +42,4 @@ async def create_delivery(
     if token_header not in NOTIFICATIONS_SRV_TOKENS:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Forbidden")
 
-    print(body)
-
-    return body.dict()
+    return await notifications_service.create_delivery(body)

@@ -22,7 +22,9 @@ token_settings = TokenSettings()
 
 TEST_TOKEN = "test"
 UGC_SRV_TOKEN = os.getenv("UGC_SRV_TOKEN", default=TEST_TOKEN)
+ADMIN_PANEL_SRV_TOKEN = os.getenv("ADMIN_PANEL_SRV_TOKEN", default=TEST_TOKEN)
 
 NOTIFICATIONS_SRV_TOKENS = {
     UGC_SRV_TOKEN,
+    ADMIN_PANEL_SRV_TOKEN,
 }

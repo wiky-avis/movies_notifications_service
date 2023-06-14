@@ -2,12 +2,35 @@ import logging
 from typing import Optional
 
 import asyncpg
-from asyncpg import Pool
+import ujson  # type: ignore[import]
+from asyncpg import Connection, Pool
 
 from notifications_api.src.settings import db_settings
 
 
 logger = logging.getLogger(__name__)
+
+
+async def register_json(conn: Connection):
+    def _encoder(value):
+        return b"\x01" + ujson.dumps(value).encode("utf-8")
+
+    def _decoder(value):
+        return ujson.loads(value[1:].decode("utf-8"))
+
+    await conn.set_type_codec(
+        "jsonb",
+        encoder=_encoder,
+        decoder=_decoder,
+        schema="pg_catalog",
+        format="binary",
+    )
+    await conn.set_type_codec(
+        "json",
+        encoder=ujson.dumps,
+        decoder=ujson.loads,
+        schema="pg_catalog",
+    )
 
 
 async def get_db():
@@ -21,7 +44,9 @@ class DbConnector:
     @staticmethod
     async def connect():
         try:
-            DbConnector.pool = await asyncpg.create_pool(db_settings.db_url)
+            DbConnector.pool = await asyncpg.create_pool(
+                db_settings.db_url, init=register_json
+            )
         except Exception:
             logger.error("Db is not initialized", exc_info=True)
 
