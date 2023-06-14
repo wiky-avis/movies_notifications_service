@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  notifications_db:
+  db:
     image: postgres:15
     restart: always
     volumes:
@@ -15,6 +15,8 @@ services:
       - ./.env
     expose:
       - "${POSTGRES_PORT}"
+    networks:
+      - custom
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d ${POSTGRES_DB} -U ${POSTGRES_USER}" ]
       interval: 10s
@@ -29,14 +31,22 @@ services:
     env_file:
       - ./.env
     depends_on:
-      - "notifications_db"
+      - "db"
+    networks:
+      - custom
 
-  fastapi:
+  notifications_api:
     build:
       context: ./.
-      dockerfile: src/Dockerfile
+      dockerfile: notifications_api/Dockerfile
     env_file:
       - ./.env
+    networks:
+      - custom
 
 volumes:
     pgdata:
+
+networks:
+  custom:
+    driver: bridge

@@ -1,13 +1,13 @@
 version: '3.8'
 services:
 
-  notifications_db:
+  db:
     ports:
       - "6666:5432"
 
-  fastapi:
+  notifications_api:
     ports:
-      - "8000:8000"
+      - "8001:8001"
 
 #  e2e-tests:
 #     image: fastapi-image

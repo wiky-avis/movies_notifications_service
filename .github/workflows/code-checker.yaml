@@ -25,11 +25,8 @@ jobs:
     - name: Запуск линтеров
       run: make linters
 
-    - name: Запуск тестов
-      run: python -m pytest tests/src/unit
-      env:
-        JWT_ALGORITHM: HS256
-        JWT_SECRET: AUTH_SERVICE_SECRET_PUBLIC_KEY
+    - name: Запуск тестов notifications_api
+      run: python -m pytest notifications_api/tests
 
   telegram:
 
