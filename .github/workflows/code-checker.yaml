@@ -25,8 +25,8 @@ jobs:
     - name: Запуск линтеров
       run: make linters
 
-#    - name: Запуск тестов notifications_api
-#      run: python -m pytest notifications_api/src/tests
+    - name: Запуск тестов notifications_api
+      run: python -m pytest notifications_api/tests
 
   telegram:
 
