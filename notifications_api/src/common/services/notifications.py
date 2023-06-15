@@ -1,3 +1,4 @@
+import logging
 from http import HTTPStatus
 
 from fastapi import HTTPException
@@ -15,6 +16,9 @@ from notifications_api.src.common.repositories.notifications import (
     NotificationsRepository,
 )
 from notifications_api.src.settings import notifications_amqp_settings
+
+
+logger = logging.getLogger(__name__)
 
 
 class NotificationsService:
@@ -42,8 +46,15 @@ class NotificationsService:
         )
 
     async def send_message(self, delivery_id):
-        await self._amqp_pika_sender.amqp_sender.send(
-            message={"delivery_id": delivery_id},
-            exchange=notifications_amqp_settings.exchange,
-            routing_key=notifications_amqp_settings.routing_key,
-        )
+        try:
+            await self._amqp_pika_sender.amqp_sender.send(
+                message={"delivery_id": delivery_id},
+                exchange=notifications_amqp_settings.exchange,
+                routing_key=notifications_amqp_settings.routing_key,
+            )
+        except Exception:
+            logger.exception(
+                "Fail to send message: delivery_id %s",
+                delivery_id,
+                exc_info=True,
+            )
