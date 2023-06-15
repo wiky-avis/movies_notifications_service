@@ -26,5 +26,7 @@ class NotificationsService:
                 detail="Failed to create a new delivery.",
             )
         return JSONResponse(
-            content=DeliveryResponse(delivery_id=delivery_id).dict()
+            content=DeliveryResponse(delivery_id=delivery_id).dict(
+                exclude_none=True
+            )
         )

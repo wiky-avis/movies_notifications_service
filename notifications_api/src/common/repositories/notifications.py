@@ -15,12 +15,16 @@ class NotificationsRepository:
         self._db = db
 
     async def create_delivery(self, data: DeliveryModel) -> Optional[int]:
+        parameters = {
+            parameter["name"]: parameter["value"]
+            for parameter in data.parameters
+        }
         try:
             delivery_id = await self._db.pool.fetchval(  # type: ignore[union-attr]
                 queries.CREATE_DELIVERY,
                 data.template_id,
                 data.recipient,
-                data.parameters,
+                parameters,
                 data.channel,
                 data.type_,
                 data.sender,

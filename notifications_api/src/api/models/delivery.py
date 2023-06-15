@@ -8,6 +8,15 @@ from typing_extensions import TypedDict
 from notifications_api.src.api.models.base import ORDJSONModelMixin
 
 
+class DeliveryStatus(str, Enum):
+    # создано
+    CREATED = "created"
+    # отправлено
+    SENT = "sent"
+    # не отправлено
+    FAILED = "failed"
+
+
 class DeliveryType(str, Enum):
     # сразу
     IMMEDIATELY = "immediately"
@@ -37,11 +46,10 @@ class DeliveryModel(ORDJSONModelMixin):
     channel: DeliveryChannel
     type_: DeliveryType = Field(alias="type")
     sender: str
-    excluded: Optional[bool]
-    exclude_reason: Optional[str]
     created_dt: Optional[datetime]
     updated_dt: Optional[datetime]
 
 
 class DeliveryResponse(ORDJSONModelMixin):
-    delivery_id: Optional[int]
+    delivery_id: Optional[int] = None
+    status: Optional[DeliveryStatus] = None
