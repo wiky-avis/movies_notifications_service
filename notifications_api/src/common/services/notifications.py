@@ -7,15 +7,24 @@ from notifications_api.src.api.models.delivery import (
     DeliveryModel,
     DeliveryResponse,
 )
+from notifications_api.src.common.connectors.amqp import (
+    AMQPSenderPikaConnector,
+)
 from notifications_api.src.common.exceptions import DatabaseError
 from notifications_api.src.common.repositories.notifications import (
     NotificationsRepository,
 )
+from notifications_api.src.settings import notifications_amqp_settings
 
 
 class NotificationsService:
-    def __init__(self, repository: NotificationsRepository):
+    def __init__(
+        self,
+        repository: NotificationsRepository,
+        amqp_pika_sender: AMQPSenderPikaConnector,
+    ):
         self._repository = repository
+        self._amqp_pika_sender = amqp_pika_sender
 
     async def create_delivery(self, data: DeliveryModel):
         try:
@@ -25,8 +34,16 @@ class NotificationsService:
                 status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
                 detail="Failed to create a new delivery.",
             )
+        await self.send_message(delivery_id)
         return JSONResponse(
             content=DeliveryResponse(delivery_id=delivery_id).dict(
                 exclude_none=True
             )
+        )
+
+    async def send_message(self, delivery_id):
+        await self._amqp_pika_sender.amqp_sender.send(
+            message={"delivery_id": delivery_id},
+            exchange=notifications_amqp_settings.exchange,
+            routing_key=notifications_amqp_settings.routing_key,
         )

@@ -35,8 +35,8 @@ class Recipient(TypedDict, total=False):
 
 
 class ObjectParameter(TypedDict):
-    value: str
     name: str
+    value: str
 
 
 class DeliveryModel(ORDJSONModelMixin):
