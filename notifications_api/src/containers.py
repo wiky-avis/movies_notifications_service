@@ -1,6 +1,6 @@
 from dependency_injector import containers, providers
 
-from notifications_api.src.common.connectors import db
+from notifications_api.src.common.connectors import amqp, db
 from notifications_api.src.common.repositories.notifications import (
     NotificationsRepository,
 )
@@ -17,13 +17,14 @@ class Container(containers.DeclarativeContainer):
     )
 
     db_client = providers.Factory(db.DbConnector)
+    amqp_client = providers.Factory(amqp.AMQPSenderPikaConnector)
 
     notifications_repository = providers.Factory(
-        NotificationsRepository,
-        db=db_client,
+        NotificationsRepository, db=db_client
     )
 
     notifications_service = providers.Factory(
         NotificationsService,
         repository=notifications_repository,
+        amqp_pika_sender=amqp_client,
     )
