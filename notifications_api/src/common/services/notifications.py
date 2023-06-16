@@ -65,7 +65,6 @@ class NotificationsService:
             raise HTTPException(status.HTTP_400_BAD_REQUEST, "Bad request")
 
         delivery = await self._repository.get_delivery_by_id(delivery_id)
-        print("----delivery", delivery)
         if not delivery:
             raise HTTPException(
                 status.HTTP_404_NOT_FOUND, "Delivery not found"
