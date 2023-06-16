@@ -19,9 +19,7 @@ from notifications_api.src.settings.token import NOTIFICATIONS_SRV_TOKENS
 router = APIRouter()
 
 
-@router.post(
-    "/v1/deliveries",
-)
+@router.post("/v1/deliveries", response_model=DeliveryResponse)
 @inject
 async def create_delivery(
     token_header: Optional[str] = Header(
@@ -31,7 +29,7 @@ async def create_delivery(
     notifications_service: NotificationsService = Depends(
         Provide[Container.notifications_service]
     ),
-) -> DeliveryResponse:
+):
     if not token_header:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Token required")
     if token_header not in NOTIFICATIONS_SRV_TOKENS:
@@ -40,9 +38,7 @@ async def create_delivery(
     return await notifications_service.create_delivery(body)
 
 
-@router.get(
-    "/v1/deliveries/{delivery_id}",
-)
+@router.get("/v1/deliveries/{delivery_id}", response_model=DeliveryResponse)
 @inject
 async def get_delivery(
     delivery_id: int,
@@ -52,7 +48,7 @@ async def get_delivery(
     notifications_service: NotificationsService = Depends(
         Provide[Container.notifications_service]
     ),
-) -> DeliveryResponse:
+):
     if not token_header:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Token required")
     if token_header not in NOTIFICATIONS_SRV_TOKENS:

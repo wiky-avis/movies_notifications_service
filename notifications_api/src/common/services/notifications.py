@@ -1,9 +1,9 @@
 import logging
 from http import HTTPStatus
+from typing import Optional
 
 from fastapi import HTTPException
 from starlette import status
-from starlette.responses import JSONResponse
 
 from notifications_api.src.api.models.delivery import (
     DeliveryModel,
@@ -31,24 +31,22 @@ class NotificationsService:
         self._repository = repository
         self._amqp_pika_sender = amqp_pika_sender
 
-    async def create_delivery(self, data: DeliveryModel):
+    async def create_delivery(
+        self, data: DeliveryModel
+    ) -> Optional[DeliveryResponse]:
         try:
-            delivery_id = await self._repository.create_delivery(data)
+            delivery = await self._repository.create_delivery(data)
         except DatabaseError:
             raise HTTPException(
                 status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
                 detail="Failed to create a new delivery.",
             )
-        await self.send_message(delivery_id)
-        return JSONResponse(
-            content=DeliveryResponse(delivery_id=delivery_id).dict(
-                exclude_none=True
-            )
-        )
+        await self.send_message(delivery.delivery_id)  # type: ignore
+        return delivery
 
-    async def send_message(self, delivery_id):
+    async def send_message(self, delivery_id: int) -> None:
         try:
-            await self._amqp_pika_sender.amqp_sender.send(
+            await self._amqp_pika_sender.amqp_sender.send(  # type: ignore
                 message={"delivery_id": delivery_id},
                 exchange=notifications_amqp_settings.exchange,
                 routing_key=notifications_amqp_settings.routing_key,
@@ -60,12 +58,19 @@ class NotificationsService:
                 exc_info=True,
             )
 
-    async def get_delivery_by_id(self, delivery_id):
+    async def get_delivery_by_id(
+        self, delivery_id: int
+    ) -> Optional[DeliveryResponse]:
         if not delivery_id:
             raise HTTPException(status.HTTP_400_BAD_REQUEST, "Bad request")
 
         delivery = await self._repository.get_delivery_by_id(delivery_id)
         if not delivery:
+            logger.warning(
+                "Delivery not found: delivery_id %s",
+                delivery_id,
+                exc_info=True,
+            )
             raise HTTPException(
                 status.HTTP_404_NOT_FOUND, "Delivery not found"
             )

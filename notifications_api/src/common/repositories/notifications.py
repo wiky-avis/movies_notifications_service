@@ -17,13 +17,15 @@ class NotificationsRepository:
     def __init__(self, db: DbConnector):
         self._db = db
 
-    async def create_delivery(self, data: DeliveryModel) -> Optional[int]:
+    async def create_delivery(
+        self, data: DeliveryModel
+    ) -> Optional[DeliveryResponse]:
         parameters = {
             parameter["name"]: parameter["value"]
             for parameter in data.parameters
         }
         try:
-            delivery_id = await self._db.pool.fetchval(  # type: ignore[union-attr]
+            row_data = await self._db.pool.fetchrow(  # type: ignore[union-attr]
                 queries.CREATE_DELIVERY,
                 data.template_id,
                 data.recipient,
@@ -42,12 +44,12 @@ class NotificationsRepository:
                 exc_info=True,
             )
             raise DatabaseError()
-        return delivery_id
+        return DeliveryResponse.parse_obj(row_data) if row_data else None
 
     async def get_delivery_by_id(
         self, delivery_id: int
     ) -> Optional[DeliveryResponse]:
         row_data = await self._db.pool.fetchrow(  # type: ignore[union-attr]
-            queries.GET_DELIVERY_DISTRIBUTIONS, delivery_id
+            queries.GET_DELIVERY, delivery_id
         )
         return DeliveryResponse.parse_obj(row_data) if row_data else None
