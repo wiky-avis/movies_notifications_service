@@ -20,10 +20,11 @@ class Container(containers.DeclarativeContainer):
     amqp_client = providers.Factory(amqp.AMQPSenderPikaConnector)
 
     notifications_repository = providers.Factory(
-        NotificationsRepository, db=db_client, amqp_pika_sender=amqp_client
+        NotificationsRepository, db=db_client
     )
 
     notifications_service = providers.Factory(
         NotificationsService,
         repository=notifications_repository,
+        amqp_pika_sender=amqp_client,
     )
