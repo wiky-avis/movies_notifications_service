@@ -46,12 +46,15 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    container_name: "rabbitmq"
+    hostname: rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: pass
+      RABBITMQ_DEFAULT_VHOST: test
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq/
       - rabbitmq_logs:/var/log/rabbitmq/
-    env_file:
-      - ./.env
     networks:
       - custom
 

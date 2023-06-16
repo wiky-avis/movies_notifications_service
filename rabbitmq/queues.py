@@ -5,7 +5,8 @@ from rabbitmq.settings import settings
 credentials = {
     "host": settings.host,
     "port": settings.port,
-    "username": settings.username,
+    "virtualhost": settings.virtualhost,
+    "login": settings.login,
     "password": settings.password,
 }
 

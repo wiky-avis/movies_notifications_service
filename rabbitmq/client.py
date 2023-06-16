@@ -1,13 +1,10 @@
 import json
 import logging
 
+import aio_pika
 import backoff
-import pika
-from pika.exceptions import (
-    AMQPConnectionError,
-    ConnectionClosed,
-    StreamLostError,
-)
+from aio_pika import DeliveryMode, Message
+from aio_pika.exceptions import AMQPConnectionError
 
 
 logger = logging.getLogger(__name__)
@@ -15,51 +12,37 @@ logger = logging.getLogger(__name__)
 
 class RabbitMQ:
     def __init__(
-        self, host: str, port: int, username: str, password: str, queue: str
+        self,
+        host: str,
+        port: int,
+        virtualhost: str,
+        login: str,
+        password: str,
+        queue: str,
     ):
         self.host = host
         self.port = port
-        self.username = username
+        self.virtualhost = virtualhost
+        self.login = login
         self.password = password
         self.queue = queue
-        self.channel = None
 
     @backoff.on_exception(backoff.expo, AMQPConnectionError)
-    def connect(self):
-        connection = pika.BlockingConnection(
-            pika.ConnectionParameters(
-                host=self.host,
-                port=self.port,
-                credentials=pika.PlainCredentials(
-                    self.username,
-                    self.password,
+    async def get_connection(self):
+        return await aio_pika.connect_robust(
+            f"amqp://{self.login}:{self.password}@{self.host}:{self.port}/{self.virtualhost}",
+        )
+
+    async def send(self, message):
+        connection = await self.get_connection()
+        async with connection:
+            channel = await connection.channel()
+            await channel.declare_queue(self.queue, durable=True)
+            await channel.default_exchange.publish(
+                Message(
+                    json.dumps(message).encode("utf-8"),
+                    delivery_mode=DeliveryMode.PERSISTENT,
                 ),
+                routing_key=self.queue,
             )
-        )
-        self.channel = connection.channel()
-        self.channel.queue_declare(queue=self.queue, durable=True)
-
-    @backoff.on_exception(backoff.expo, [ConnectionClosed, StreamLostError])
-    def publish(self, message):
-        if self.channel is None or self.channel.is_closed:
-            logger.info("Reconnected RabbitMQ")
-            self.connect()
-
-        self.channel.basic_publish(
-            exchange="",
-            routing_key=self.queue,
-            body=json.dumps(message),
-            properties=pika.BasicProperties(delivery_mode=2),
-        )
-        logger.info("Channel %s: Sent %s" % (self.channel, message))
-
-    def start_consuming(self, callback):
-        if self.channel is None or self.channel.is_closed:
-            logger.info("Reconnected RabbitMQ")
-            self.connect()
-
-        self.channel.basic_consume(
-            queue=self.queue, on_message_callback=callback
-        )
-        logger.info("Channel %s is waiting for messages" % self.channel)
-        self.channel.start_consuming()
+            logger.info("Channel %s: Sent %s" % (channel, message))
