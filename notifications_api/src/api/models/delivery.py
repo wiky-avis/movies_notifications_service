@@ -46,8 +46,8 @@ class DeliveryModel(ORDJSONModelMixin):
     channel: DeliveryChannel
     type_: DeliveryType = Field(alias="type")
     sender: str
-    created_dt: Optional[datetime]
-    updated_dt: Optional[datetime]
+    created_dt: Optional[datetime] = None
+    updated_dt: Optional[datetime] = None
 
 
 class DeliveryResponse(ORDJSONModelMixin):
