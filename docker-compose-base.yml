@@ -44,8 +44,24 @@ services:
     networks:
       - custom
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    hostname: rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: pass
+      RABBITMQ_DEFAULT_VHOST: test
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+      - rabbitmq_logs:/var/log/rabbitmq/
+    networks:
+      - custom
+
 volumes:
     pgdata:
+    rabbitmq_data:
+    rabbitmq_logs:
 
 networks:
   custom:
