@@ -38,3 +38,24 @@ async def create_delivery(
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Forbidden")
 
     return await notifications_service.create_delivery(body)
+
+
+@router.get(
+    "/v1/deliveries/{delivery_id}",
+)
+@inject
+async def get_delivery(
+    delivery_id: int,
+    token_header: Optional[str] = Header(
+        None, alias=token_settings.token_header
+    ),
+    notifications_service: NotificationsService = Depends(
+        Provide[Container.notifications_service]
+    ),
+) -> DeliveryResponse:
+    if not token_header:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Token required")
+    if token_header not in NOTIFICATIONS_SRV_TOKENS:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "Forbidden")
+
+    return await notifications_service.get_delivery_by_id(delivery_id)

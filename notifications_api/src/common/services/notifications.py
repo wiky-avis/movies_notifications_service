@@ -2,6 +2,7 @@ import logging
 from http import HTTPStatus
 
 from fastapi import HTTPException
+from starlette import status
 from starlette.responses import JSONResponse
 
 from notifications_api.src.api.models.delivery import (
@@ -58,3 +59,15 @@ class NotificationsService:
                 delivery_id,
                 exc_info=True,
             )
+
+    async def get_delivery_by_id(self, delivery_id):
+        if not delivery_id:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, "Bad request")
+
+        delivery = await self._repository.get_delivery_by_id(delivery_id)
+        print("----delivery", delivery)
+        if not delivery:
+            raise HTTPException(
+                status.HTTP_404_NOT_FOUND, "Delivery not found"
+            )
+        return delivery

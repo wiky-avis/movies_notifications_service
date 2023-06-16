@@ -1,7 +1,10 @@
 import logging
 from typing import Optional
 
-from notifications_api.src.api.models.delivery import DeliveryModel
+from notifications_api.src.api.models.delivery import (
+    DeliveryModel,
+    DeliveryResponse,
+)
 from notifications_api.src.common.connectors.db import DbConnector
 from notifications_api.src.common.exceptions import DatabaseError
 from notifications_api.src.common.repositories import queries
@@ -40,3 +43,11 @@ class NotificationsRepository:
             )
             raise DatabaseError()
         return delivery_id
+
+    async def get_delivery_by_id(
+        self, delivery_id: int
+    ) -> Optional[DeliveryResponse]:
+        row_data = await self._db.pool.fetchrow(  # type: ignore[union-attr]
+            queries.GET_DELIVERY_DISTRIBUTIONS, delivery_id
+        )
+        return DeliveryResponse.parse_obj(row_data) if row_data else None

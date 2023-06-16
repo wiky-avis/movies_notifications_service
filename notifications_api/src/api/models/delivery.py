@@ -53,3 +53,5 @@ class DeliveryModel(ORDJSONModelMixin):
 class DeliveryResponse(ORDJSONModelMixin):
     delivery_id: Optional[int] = None
     status: Optional[DeliveryStatus] = None
+    created_dt: Optional[datetime] = None
+    updated_dt: Optional[datetime] = None
