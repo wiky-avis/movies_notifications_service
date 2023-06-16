@@ -44,8 +44,21 @@ services:
     networks:
       - custom
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: "rabbitmq"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+      - rabbitmq_logs:/var/log/rabbitmq/
+    env_file:
+      - ./.env
+    networks:
+      - custom
+
 volumes:
     pgdata:
+    rabbitmq_data:
+    rabbitmq_logs:
 
 networks:
   custom:
