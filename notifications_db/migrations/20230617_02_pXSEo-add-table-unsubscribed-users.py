@@ -12,7 +12,7 @@ steps = [
         SET statement_timeout TO '2s';   
         CREATE TABLE IF NOT EXISTS unsubscribed_users (
             id bigserial PRIMARY KEY,
-            user_id varchar NOT NULL,
+            user_id UUID NOT NULL,
             reason text,
             created_dt timestamp with time zone default now()
         );
