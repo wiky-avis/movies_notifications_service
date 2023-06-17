@@ -2,12 +2,17 @@ import sys
 
 import uvicorn as uvicorn
 from fastapi import FastAPI
+from fastapi.exceptions import HTTPException, RequestValidationError
 
 from notifications_api.src.api import srv
 from notifications_api.src.common.connectors.amqp import (
     AMQPSenderPikaConnector,
 )
 from notifications_api.src.common.connectors.db import DbConnector
+from notifications_api.src.common.exception_handlers import (
+    http_exception_handler,
+    request_validation_exception_handler,
+)
 from notifications_api.src.containers import Container
 from notifications_api.src.settings import logger, settings
 
@@ -25,9 +30,13 @@ def create_app() -> FastAPI:
             DbConnector.disconnect,
             AMQPSenderPikaConnector.close,
         ],
+        exception_handlers={
+            HTTPException: http_exception_handler,
+            RequestValidationError: request_validation_exception_handler,
+        },
         title="test",
         openapi_url="/openapi.json",
-        docs_url="/swagger",
+        docs_url="/api/swagger",
         openapi_prefix="",
     )
     app.container = container  # type: ignore
