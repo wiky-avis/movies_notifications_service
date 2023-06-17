@@ -10,3 +10,8 @@ GET_DELIVERY = """
     LEFT JOIN delivery_distributions dd ON dd.delivery_id = d.delivery_id
     WHERE d.delivery_id=$1;
 """
+CREATE_UNSUBSCRIBED_USER = """
+    INSERT INTO unsubscribed_users(user_id, reason)
+    VALUES ($1, $2)
+    RETURNING id;
+"""

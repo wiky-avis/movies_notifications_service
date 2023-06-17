@@ -1,10 +1,13 @@
 import logging
 from typing import Optional
 
+from asyncpg import UniqueViolationError
+
 from notifications_api.src.api.models.delivery import (
     DeliveryModel,
     DeliveryResponse,
 )
+from notifications_api.src.api.models.subscription import UserSubscriptionInput
 from notifications_api.src.common.connectors.db import DbConnector
 from notifications_api.src.common.exceptions import DatabaseError
 from notifications_api.src.common.repositories import queries
@@ -53,3 +56,26 @@ class NotificationsRepository:
             queries.GET_DELIVERY, delivery_id
         )
         return DeliveryResponse.parse_obj(row_data) if row_data else None
+
+    async def unsubscribe_user(self, data: UserSubscriptionInput) -> None:
+        try:
+            await self._db.pool.fetchval(  # type: ignore[union-attr]
+                queries.CREATE_UNSUBSCRIBED_USER,
+                data.user_id,
+                data.reason,
+            )
+        except UniqueViolationError:
+            logger.exception(
+                "user_id %s has already been unsubscribed.",
+                data.user_id,
+                exc_info=True,
+            )
+            raise
+        except Exception:
+            logger.exception(
+                "Failed to create unsubscribe: user_id %s reason %s",
+                data.user_id,
+                data.reason,
+                exc_info=True,
+            )
+            raise DatabaseError()
