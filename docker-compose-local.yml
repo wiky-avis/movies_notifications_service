@@ -13,7 +13,7 @@ services:
     environment:
       - NOTIFICATIONS_SENDER_AMQP_URL=amqp://user:pass@rabbitmq:5672/test
     ports:
-      - "8000:8000"
+      - "8001:8001"
 
   redis:
     ports:
