@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   db:
     image: postgres:15
     restart: always
@@ -35,10 +36,25 @@ services:
     networks:
       - custom
 
+  redis:
+    image: redis:7.0.11-alpine
+    restart: always
+    volumes:
+      - redis_admin_panel:/opt/redis/admin_panel
+
   notifications_api:
     build:
       context: ./.
       dockerfile: notifications_api/Dockerfile
+    env_file:
+      - ./.env
+    networks:
+      - custom
+
+  admin_panel:
+    build:
+      context: ./.
+      dockerfile: admin_panel/Dockerfile
     env_file:
       - ./.env
     networks:
@@ -60,6 +76,7 @@ services:
 
 volumes:
     pgdata:
+    redis_admin_panel:
     rabbitmq_data:
     rabbitmq_logs:
 

@@ -39,4 +39,5 @@ lines_after_imports = 2
 skip = [".venv", "venv", "migrations", "rabbitmq"]
 
 [tool.mypy]
+exclude = ['tests','docs','nginx','notifications_db']
 ignore_missing_imports = true
