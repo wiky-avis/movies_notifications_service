@@ -7,12 +7,16 @@ from notifications_api.src.common.repositories.notifications import (
 from notifications_api.src.common.services.notifications import (
     NotificationsService,
 )
+from notifications_api.src.common.services.subscription import (
+    UserSubscriptionService,
+)
 
 
 class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
             "notifications_api.src.api.srv.endpoints.deliveries",
+            "notifications_api.src.api.v1.endpoints.users",
         ]
     )
 
@@ -27,4 +31,9 @@ class Container(containers.DeclarativeContainer):
         NotificationsService,
         repository=notifications_repository,
         amqp_pika_sender=amqp_client,
+    )
+
+    user_subscription_service = providers.Factory(
+        UserSubscriptionService,
+        repository=notifications_repository,
     )
