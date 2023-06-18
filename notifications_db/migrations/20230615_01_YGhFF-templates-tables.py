@@ -16,7 +16,7 @@ steps = [
             description varchar,
             mandatory_parameters json,
             optional_parameters json,
-            channel, varchar(10) not null,
+            channel varchar(10) not null,
             type varchar not null,
             created_dt timestamp with time zone default now(),
             updated_dt timestamp with time zone default now(),
