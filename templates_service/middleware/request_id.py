@@ -1,10 +1,9 @@
 from http import HTTPStatus
 from uuid import uuid4
 
+from admin_panel_old.settings import settings
 from fastapi import Request
 from fastapi.responses import JSONResponse
-
-from admin_panel_old.settings import settings
 
 
 class RequestIdMiddleware:
