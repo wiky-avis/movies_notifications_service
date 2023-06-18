@@ -11,7 +11,7 @@ GET_DELIVERY = """
     WHERE d.delivery_id=$1;
 """
 CREATE_UNSUBSCRIBED_USER = """
-    INSERT INTO unsubscribed_users(user_id, reason)
-    VALUES ($1, $2)
+    INSERT INTO unsubscribed_users(user_id, reason, mailing_type)
+    VALUES ($1, $2, $3)
     RETURNING id;
 """
