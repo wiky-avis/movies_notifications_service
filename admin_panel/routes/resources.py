@@ -15,12 +15,12 @@ from fastapi_admin.resources import (
 from fastapi_admin.widgets import displays, filters, inputs
 from starlette.requests import Request
 
-from admin_panel import enums
-from admin_panel.models import Admin, Config, EmailTemplate
+from admin_panel.common.models import enums
+from admin_panel.common.models.admin import Admin, Config, EmailTemplate
 from admin_panel.settings.constants import BASE_DIR
 
 
-upload = FileUpload(uploads_dir=os.path.join(BASE_DIR, "static", "uploads"))
+upload = FileUpload(uploads_dir=os.path.join(BASE_DIR, "../static", "uploads"))
 
 
 @app.register

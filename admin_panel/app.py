@@ -21,8 +21,8 @@ from starlette.status import (
 )
 from tortoise.contrib.fastapi import register_tortoise
 
-from admin_panel.models import Admin
-from admin_panel.providers import LoginProvider
+from admin_panel.common.models.admin import Admin
+from admin_panel.providers.login import LoginProvider
 from admin_panel.settings import logger, settings
 from admin_panel.settings.constants import BASE_DIR
 

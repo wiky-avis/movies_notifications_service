@@ -6,7 +6,7 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse
 from starlette.status import HTTP_303_SEE_OTHER, HTTP_404_NOT_FOUND
 
-from admin_panel.models import Config
+from admin_panel.common.models.admin import Config
 
 
 @app.get("/")

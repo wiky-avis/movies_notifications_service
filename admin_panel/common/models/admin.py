@@ -3,7 +3,7 @@ import datetime
 from fastapi_admin.models import AbstractAdmin
 from tortoise import Model, fields
 
-from admin_panel.enums import NotificationStatus, Status
+from admin_panel.common.models.enums import NotificationStatus, Status
 
 
 class Admin(AbstractAdmin):
