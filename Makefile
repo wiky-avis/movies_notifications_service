@@ -9,6 +9,7 @@ isort:
 
 mypy:
 	mypy notifications_api --explicit-package-bases
+	mypy templates_service --explicit-package-bases
 
 
 linters: isort black flake8 mypy
