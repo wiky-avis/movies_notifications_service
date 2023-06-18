@@ -4,12 +4,12 @@ from typing import Optional
 from notifications_api.src.api.models.base import ORDJSONModelMixin
 
 
-class MailingType(str, Enum):
+class ChannelType(str, Enum):
     # почта
     EMAIL = "email"
 
 
 class UserSubscriptionInput(ORDJSONModelMixin):
     user_id: str
-    mailing_type: MailingType = MailingType.EMAIL
+    channel_type: ChannelType = ChannelType.EMAIL
     reason: Optional[str] = None

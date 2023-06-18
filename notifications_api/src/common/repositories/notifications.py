@@ -63,7 +63,7 @@ class NotificationsRepository:
                 queries.CREATE_UNSUBSCRIBED_USER,
                 data.user_id,
                 data.reason,
-                data.mailing_type,
+                data.channel_type,
             )
         except UniqueViolationError:
             logger.exception(

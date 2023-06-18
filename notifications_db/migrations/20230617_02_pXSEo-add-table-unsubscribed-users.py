@@ -14,7 +14,7 @@ steps = [
             id bigserial PRIMARY KEY,
             user_id UUID NOT NULL,
             reason text,
-            mailing_type varchar,
+            channel_type varchar,
             created_dt timestamp with time zone default now()
         );
         """,
