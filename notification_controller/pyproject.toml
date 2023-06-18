@@ -16,6 +16,7 @@ aiomisc = "17.3.2"
 orjson = "3.9.1"
 aiocron = "1.8"
 punq = "0.6.2"
+python-dotenv = "1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "7.3.2"

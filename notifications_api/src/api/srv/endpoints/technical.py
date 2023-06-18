@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends
-
-from notifications_api.src.common.connectors.db import get_db
+from src.common.connectors.db import get_db
 
 
 router = APIRouter()

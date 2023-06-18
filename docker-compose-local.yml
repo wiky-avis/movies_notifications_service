@@ -15,13 +15,17 @@ services:
     ports:
       - "8001:8001"
 
-  redis:
-    ports:
-      - '6379:6379'
+  consumers:
+    environment:
+      - NOTIFICATIONS_ENRICHER_CONSUMER_AMQP_URL=amqp://user:pass@rabbitmq:5672/test
 
-  admin_panel:
-    ports:
-      - "8000:8000"
+#  redis:
+#    ports:
+#      - '6379:6379'
+
+#  admin_panel:
+#    ports:
+#      - "8000:8000"
 
   rabbitmq:
     ports:

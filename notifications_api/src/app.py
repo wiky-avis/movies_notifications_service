@@ -3,18 +3,15 @@ import sys
 import uvicorn as uvicorn
 from fastapi import FastAPI
 from fastapi.exceptions import HTTPException, RequestValidationError
-
-from notifications_api.src.api import srv, v1
-from notifications_api.src.common.connectors.amqp import (
-    AMQPSenderPikaConnector,
-)
-from notifications_api.src.common.connectors.db import DbConnector
-from notifications_api.src.common.exception_handlers import (
+from src.api import srv, v1
+from src.common.connectors.amqp import AMQPSenderPikaConnector
+from src.common.connectors.db import DbConnector
+from src.common.exception_handlers import (
     http_exception_handler,
     request_validation_exception_handler,
 )
-from notifications_api.src.containers import Container
-from notifications_api.src.settings import logger, settings
+from src.containers import Container
+from src.settings import logger, settings
 
 
 def create_app() -> FastAPI:

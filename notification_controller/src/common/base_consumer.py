@@ -4,8 +4,7 @@ import logging
 import aio_pika
 import aiomisc
 from httpx import AsyncClient
-
-from notification_controller.settings.consumers import BaseConsumerSettings
+from settings.consumers import BaseConsumerSettings
 
 
 logger = logging.getLogger(__name__)

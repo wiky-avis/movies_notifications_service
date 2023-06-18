@@ -1,7 +1,7 @@
 from typing import Optional
 
-from notifications_api.src.common.clients.amqp_sender import AMQPSenderPika
-from notifications_api.src.settings import notifications_amqp_settings
+from src.common.clients.amqp_sender import AMQPSenderPika
+from src.settings import notifications_amqp_settings
 
 
 class AMQPSenderPikaConnector:

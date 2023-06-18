@@ -4,8 +4,7 @@ import logging
 import aiocron
 import aiomisc
 from httpx import AsyncClient
-
-from notification_controller.settings.daemons import BaseDaemonConfig
+from settings.daemons import BaseDaemonConfig
 
 
 logger = logging.getLogger(__name__)

@@ -26,9 +26,9 @@ services:
 
   migration:
     build:
-      context: ./.
-      dockerfile: notifications_db/Dockerfile
-    command: bash -c "yoyo apply --database ${DATABASE_URL} /notifications_db/migrations -b"
+      context: ./notifications_db
+      dockerfile: ./Dockerfile
+    command: bash -c "yoyo apply --database ${DATABASE_URL} ./migrations -b"
     env_file:
       - ./.env
     depends_on:
@@ -36,29 +36,41 @@ services:
     networks:
       - custom
 
-  redis:
-    image: redis:7.0.11-alpine
-    restart: always
-    volumes:
-      - redis_admin_panel:/opt/redis/admin_panel
+#  redis:
+#    image: redis:7.0.11-alpine
+#    restart: always
+#    volumes:
+#      - redis_admin_panel:/opt/redis/admin_panel
 
   notifications_api:
     build:
-      context: ./.
-      dockerfile: notifications_api/Dockerfile
+      context: ./notifications_api
+      dockerfile: ./Dockerfile
     env_file:
       - ./.env
     networks:
       - custom
 
-  admin_panel:
+  consumers:
     build:
-      context: ./.
-      dockerfile: admin_panel/Dockerfile
+      context: ./notification_controller
+      dockerfile: ./Dockerfile
+    command: "python ./manage.py run-consumers"
+    depends_on:
+      - "db"
     env_file:
       - ./.env
     networks:
       - custom
+
+#  admin_panel:
+#    build:
+#      context: ./.
+#      dockerfile: admin_panel/Dockerfile
+#    env_file:
+#      - ./.env
+#    networks:
+#      - custom
 
   rabbitmq:
     image: rabbitmq:3-management-alpine

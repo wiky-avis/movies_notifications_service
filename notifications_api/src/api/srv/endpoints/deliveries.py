@@ -2,16 +2,13 @@ from typing import Optional
 
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Body, Depends, Header, HTTPException
+from src.api.models.delivery import DeliveryModel
+from src.common.responses import ApiResponse, wrap_response
+from src.common.services.notifications import NotificationsService
+from src.containers import Container
+from src.settings import token_settings
+from src.settings.token import NOTIFICATIONS_SRV_TOKENS
 from starlette import status
-
-from notifications_api.src.api.models.delivery import DeliveryModel
-from notifications_api.src.common.responses import ApiResponse, wrap_response
-from notifications_api.src.common.services.notifications import (
-    NotificationsService,
-)
-from notifications_api.src.containers import Container
-from notifications_api.src.settings import token_settings
-from notifications_api.src.settings.token import NOTIFICATIONS_SRV_TOKENS
 
 
 router = APIRouter()

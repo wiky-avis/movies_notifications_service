@@ -1,6 +1,5 @@
 from fastapi import APIRouter
-
-from notifications_api.src.api.srv.endpoints import deliveries, technical
+from src.api.srv.endpoints import deliveries, technical
 
 
 router = APIRouter(prefix="/api/srv", tags=["srv"])

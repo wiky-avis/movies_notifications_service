@@ -4,8 +4,7 @@ from typing import Optional
 import asyncpg
 import ujson  # type: ignore[import]
 from asyncpg import Connection, Pool
-
-from notifications_api.src.settings import db_settings
+from settings import db_settings
 
 
 logger = logging.getLogger(__name__)
