@@ -5,8 +5,8 @@ from pydantic import ValidationError
 from src.common.clients.auth_api import AuthApiClient
 from src.common.connectors.amqp import AMQPSenderPikaConnector
 from src.common.repositories.notifications import NotificationsRepository
-
 from src.workers.models.notification import NotificationEventModel
+
 
 logger = logging.getLogger(__name__)
 
@@ -32,9 +32,13 @@ class NotificationsEnricherService:
 
     @staticmethod
     def _load_model(
-            body: bytes,
+        body: bytes,
     ) -> Optional[NotificationEventModel]:
         try:
             return NotificationEventModel.parse_raw(body)
         except ValidationError:
-            logger.warning("Fail to parse data for notifications event - %s", body, exc_info=True)
+            logger.warning(
+                "Fail to parse data for notifications event - %s",
+                body,
+                exc_info=True,
+            )

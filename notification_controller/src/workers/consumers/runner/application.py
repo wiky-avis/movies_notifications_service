@@ -5,8 +5,8 @@ from src.common.base_consumer import BaseRunner
 from src.common.clients.auth_api import AuthApiClient
 from src.common.connectors.amqp import AMQPSenderPikaConnector
 from src.common.connectors.db import DbConnector
-from src.workers.consumers.notifications_enricher_consumer.service import (
-    NotificationsEnricherService,
+from src.workers.consumers.notifications_enricher_consumer.consumer import (
+    NotificationsEnricherConsumer,
 )
 
 
@@ -18,7 +18,7 @@ class Runner(BaseRunner):
         self,
         db: DbConnector,
         auth_api_client: AuthApiClient,
-        notifications_enricher_consumer: NotificationsEnricherService,
+        notifications_enricher_consumer: NotificationsEnricherConsumer,
         amqp_sender: AMQPSenderPikaConnector,
     ):
         self._db = db

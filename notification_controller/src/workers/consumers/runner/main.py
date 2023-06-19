@@ -3,7 +3,7 @@ from settings import (
     NOTIFICATIONS_ENRICHER_CONSUMER,
     NotificationsEnricherConfig,
 )
-from settings.clients import NOTIFICATIONS_ENRICHER_SENDER
+from settings.sender import NOTIFICATIONS_ENRICHER_SENDER
 from src.workers.consumers.runner import application, bootstrap
 
 

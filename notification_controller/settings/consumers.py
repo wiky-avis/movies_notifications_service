@@ -1,7 +1,8 @@
 import os
+import socket
 
 from pydantic import AmqpDsn, BaseSettings, PositiveInt
-from settings.clients import NotificationsEnricherAmqpSender
+from settings.sender import NotificationsEnricherAmqpSender
 from settings.services import AuthApiSettings
 
 
@@ -32,21 +33,26 @@ class NotificationsEnricherConfig(BaseConfig):
     notifications_enricher_consumer: BaseConsumerSettings
 
 
+CONSUMER_TAG = (
+    os.getenv("TASK_CONSUMER_TAG", default=None) or socket.gethostname()
+)
+
 NOTIFICATIONS_ENRICHER_CONSUMER = {
     "url": os.getenv(
         "NOTIFICATIONS_ENRICHER_CONSUMER_AMQP_URL",
-        default="amqp://user:pass@127.0.0.1:8030/test",
+        default="amqp://user:pass@rabbitmq:5672/test",
     ),
     "queue_name": os.getenv(
         "NOTIFICATIONS_ENRICHER_CONSUMER_QUEUE",
-        default="notifications.enricher",
+        default="notifications_api.created_delivery",
     ),
     "exchange_name": os.getenv(
-        "NOTIFICATIONS_ENRICHER_CONSUMER_EXCHANGE", default="notifications"
+        "NOTIFICATIONS_ENRICHER_CONSUMER_EXCHANGE",
+        default="notifications_api.created_delivery",
     ),
     "routing_key": os.getenv(
         "NOTIFICATIONS_ENRICHER_CONSUMER_ROUTING_KEY",
-        default="delivery.created",
+        default="event.created",
     ),
-    "consumer_tag": "notifications_enricher",
+    "consumer_tag": CONSUMER_TAG,
 }
