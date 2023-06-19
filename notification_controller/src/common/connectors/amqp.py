@@ -1,21 +1,24 @@
 from typing import Optional
 
 from src.common.clients.amqp_sender import AMQPSenderPika
-from src.settings import notifications_amqp_settings
 
 
 class AMQPSenderPikaConnector:
     amqp_sender: Optional[AMQPSenderPika] = None
 
-    @classmethod
-    async def setup(cls):
-        cls.amqp_sender = AMQPSenderPika(
-            settings=notifications_amqp_settings.dict()
-        )
-        await cls.amqp_sender.setup()
+    def __init__(self, config: dict):
+        self._settings = config
+
+    async def setup(self):
+        self.amqp_sender = AMQPSenderPika(settings=self._settings.dict())
+        await self.amqp_sender.setup()
 
     @classmethod
     async def close(cls):
         if cls.amqp_sender:
             await cls.amqp_sender.close()
             cls.amqp_sender = None
+
+
+def resolve_amqp_sender_client(config: dict):
+    return AMQPSenderPikaConnector(config=config)

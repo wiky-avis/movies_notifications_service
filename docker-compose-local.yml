@@ -18,6 +18,7 @@ services:
   consumers:
     environment:
       - NOTIFICATIONS_ENRICHER_CONSUMER_AMQP_URL=amqp://user:pass@rabbitmq:5672/test
+      - NOTIFICATIONS_ENRICHER_SENDER_AMQP_URL=amqp://user:pass@rabbitmq:5672/test
 
 #  redis:
 #    ports:

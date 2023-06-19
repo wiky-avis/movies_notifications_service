@@ -1,6 +1,7 @@
 import os
 
 from pydantic import AmqpDsn, BaseSettings, PositiveInt
+from settings.clients import NotificationsEnricherAmqpSender
 from settings.services import AuthApiSettings
 
 
@@ -26,6 +27,7 @@ class BaseConfig(BaseSettings):
 class NotificationsEnricherConfig(BaseConfig):
     # клиенты
     auth_api_client: AuthApiSettings
+    notifications_enricher_amqp_sender: NotificationsEnricherAmqpSender
     # консьюмеры
     notifications_enricher_consumer: BaseConsumerSettings
 
