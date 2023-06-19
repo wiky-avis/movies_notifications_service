@@ -36,11 +36,11 @@ services:
     networks:
       - custom
 
-#  redis:
-#    image: redis:7.0.11-alpine
-#    restart: always
-#    volumes:
-#      - redis_admin_panel:/opt/redis/admin_panel
+  redis:
+    image: redis:7.0.11-alpine
+    restart: always
+    volumes:
+      - redis_admin_panel:/opt/redis/admin_panel
 
   notifications_api:
     build:
@@ -63,14 +63,14 @@ services:
     networks:
       - custom
 
-#  admin_panel:
-#    build:
-#      context: ./.
-#      dockerfile: admin_panel/Dockerfile
-#    env_file:
-#      - ./.env
-#    networks:
-#      - custom
+  admin_panel:
+    build:
+      context: ./.
+      dockerfile: admin_panel/Dockerfile
+    env_file:
+      - ./.env
+    networks:
+      - custom
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
