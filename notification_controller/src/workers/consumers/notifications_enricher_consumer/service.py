@@ -135,7 +135,7 @@ class NotificationsEnricherService:
             return DeliveryEventModel.parse_raw(body)
         except ValidationError:
             logger.warning(
-                "Fail to parse data for notifications event - %s",
+                "Fail to parse data for delivery event - %s",
                 body,
                 exc_info=True,
             )

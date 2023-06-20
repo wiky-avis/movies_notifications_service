@@ -5,11 +5,6 @@ from pydantic import BaseModel
 from src.workers.models.delivery import DeliveryChannel
 
 
-class Recipient(BaseModel):
-    user_id: str
-    email: Optional[str] = None
-
-
 class UserUnsubscriptionModel(BaseModel):
     id: int
     user_id: str
