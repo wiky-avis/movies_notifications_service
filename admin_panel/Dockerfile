@@ -1,18 +1,18 @@
-FROM --platform=linux/amd64 python:3.10-buster
+FROM python:3.11-buster
 
-WORKDIR /opt/app
+WORKDIR /code
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-ENV PYTHONPATH "${PYTHONPATH}:/opt/app"
-
-COPY pyproject.toml .
 
 RUN pip3 install poetry==1.4.2 --no-cache-dir
-RUN poetry config virtualenvs.create false && poetry install
 
-COPY . .
+COPY poetry.lock pyproject.toml /code/
 
-RUN chmod +x admin_panel/run.sh
+RUN poetry config experimental.new-installer false && poetry config virtualenvs.create false && poetry install --no-root
 
-ENTRYPOINT ["/opt/app/admin_panel/run.sh"]
+COPY . /code
+
+RUN chmod +x /code/run.sh
+
+ENTRYPOINT ["/code/run.sh"]

@@ -36,12 +36,6 @@ services:
     networks:
       - custom
 
-  redis:
-    image: redis:7.0.11-alpine
-    restart: always
-    volumes:
-      - redis_admin_panel:/opt/redis/admin_panel
-
   notifications_api:
     build:
       context: ./notifications_api
@@ -86,8 +80,8 @@ services:
 
   admin_panel:
     build:
-      context: ./.
-      dockerfile: admin_panel/Dockerfile
+      context: ./admin_panel
+      dockerfile: ./Dockerfile
     env_file:
       - ./.env
     networks:
