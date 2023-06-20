@@ -1,5 +1,3 @@
-from typing import Dict
-
 from httpx import AsyncClient
 from settings.services import AuthApiSettings
 
@@ -14,16 +12,18 @@ class AuthApiClient(AsyncClient):
         self.token = token
 
     @property
-    def default_headers(self) -> Dict:
+    def default_headers(self) -> dict:
         return {"X-Token": self.token}
 
-    async def get_user_by_id(self, user_id: str):
+    async def get_user_by_id(self, user_id: str) -> dict:
         """Получить данные пользователя."""
 
-        # url = f"/api/srv/users/{user_id}"
-        # response_body = await self.get(url=url, headers=self.default_headers)
-        # resp = response_body.json()
-        # return resp
+        url = "/api/srv/users"
+        params = {"user_id": user_id}
+        response_body = await self.get(
+            url=url, headers=self.default_headers, params=params
+        )
+        return response_body.json()
 
 
 def resolve_auth_api_client(config: AuthApiSettings):
