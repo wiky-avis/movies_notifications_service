@@ -7,6 +7,12 @@ from src.common.connectors.amqp import AMQPSenderPikaConnector
 from src.common.repositories.notifications import NotificationsRepository
 from src.workers.models.delivery import DeliveryEventModel
 
+from notification_controller.src.common.exceptions import (
+    BadRequestError,
+    ClientError,
+    ServiceError,
+)
+
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +37,18 @@ class NotificationsEnricherService:
         )
         if not delivery_data:
             return
+
+    async def get_recipient(self, recipient_id: str):
+        try:
+            user = self._auth_api_client.get_user_by_id(recipient_id)
+        except (BadRequestError, ServiceError, ClientError):
+            logger.warning(
+                "Getting user info error: user_id %s",
+                recipient_id,
+                exc_info=True,
+            )
+            return
+        return user
 
     @staticmethod
     def _load_model(
