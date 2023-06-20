@@ -7,8 +7,8 @@ from src.workers.cron.runner import (
 
 
 config = DeliveryTriggerStarterConfig(
-    notifications_enricher_consumer=DELIVERY_TRIGGER_STARTER,
-    notifications_enricher_amqp_sender=DELIVERY_TRIGGER_STARTER_SENDER,
+    delivery_trigger_starter=DELIVERY_TRIGGER_STARTER,
+    delivery_trigger_starter_amqp_sender=DELIVERY_TRIGGER_STARTER_SENDER,
 )
 
 resources = bootstrap.resolve_resources(config=config)
