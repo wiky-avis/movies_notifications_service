@@ -5,8 +5,6 @@ from jinja2 import Environment, Template, meta
 from jinja2.exceptions import TemplateError
 
 from templates_service.common.exceptions import TemplateValidationError
-from templates_service.common.models.inputs import CreateTemplateIn
-from templates_service.common.models.templates import NotificationTemplate
 
 
 class HTMLValidator:
@@ -17,9 +15,9 @@ class HTMLValidator:
         self.mandatory_parameters: list[str] = None
         self.optional_parameters: Dict[str, str] = None
 
-    def parse(self, template_input: CreateTemplateIn) -> NotificationTemplate:
+    def parse(self, template_body: str) -> tuple[list | None, dict | None]:
         try:
-            self.template_str = template_input.template_body
+            self.template_str = template_body
             # Парсит шаблон и выдает и возвращает специальную модель Template
             # https://jinja.palletsprojects.com/en/3.1.x/extensions/#jinja2.nodes.Template
             self.jinja_template = self.env.parse(self.template_str)
@@ -27,18 +25,7 @@ class HTMLValidator:
             # Парсим параметры в шаблоне, обновит атрибуты класса
             self.parse_parameters()
 
-            template = NotificationTemplate(
-                template_id=template_input.template_id,
-                template_name=template_input.template_name,
-                template_body=template_input.template_body,
-                description=template_input.description,
-                mandatory_parameters=self.mandatory_parameters,
-                optional_parameters=self.optional_parameters,
-                channel=template_input.channel,
-                type=template_input.type_,
-            )
-
-            return template
+            return self.mandatory_parameters, self.optional_parameters
 
         except TemplateValidationError as template_error:
             raise template_error
@@ -83,3 +70,20 @@ class HTMLValidator:
             self.optional_parameters = optional_parameters
         if not mandatory_parameters:
             self.mandatory_parameters = mandatory_parameters
+
+    def render(self, template_body: str, template_parameters: dict) -> str:
+        try:
+            # Парсит шаблон и выдает и возвращает специальную модель Template
+            # https://jinja.palletsprojects.com/en/3.1.x/extensions/#jinja2.nodes.Template
+            jinja_template = self.env.from_string(template_body)
+
+            return jinja_template.render(template_parameters)
+
+        except TemplateError as jinja_error:
+            if hasattr(jinja_error, "message"):
+                error_message = jinja_error.message
+            else:
+                error_message = "Ошибка валидации шаблона"
+            raise TemplateValidationError(error_message)
+        except Exception:
+            raise TemplateValidationError()

@@ -2,10 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-
-class CreateTemplateOut(BaseModel):
-    status: str
-    details: Optional[str] = None
+from templates_service.common.models.templates import NotificationTemplate
 
 
 class HTTPErrorResponse(BaseModel):
@@ -15,3 +12,19 @@ class HTTPErrorResponse(BaseModel):
         schema_extra = {
             "example": {"detail": "HTTPException raised."},
         }
+
+
+class TemplateOut(BaseModel):
+    status: str
+    template_id: Optional[int] = None
+    details: Optional[str] = None
+
+
+class TemplatesListing(BaseModel):
+    status: str
+    count: int
+    items: list[NotificationTemplate]
+
+
+class RenderTemplateOut(BaseModel):
+    rendered: str

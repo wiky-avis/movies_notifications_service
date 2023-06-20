@@ -30,6 +30,10 @@ services:
     ports:
       - "8000:8000"
 
+  templates_service:
+    ports:
+      - "8002:8002"
+
   rabbitmq:
     ports:
       - "8020:15672"
