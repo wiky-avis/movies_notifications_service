@@ -42,7 +42,7 @@ router = APIRouter()
         },
         403: {
             "model": HTTPErrorResponse,
-            "description": "Предоставленный токен не списке разрешенных",
+            "description": "Предоставленный токен не в списке разрешенных",
         },
         409: {
             "model": HTTPErrorResponse,
@@ -102,7 +102,7 @@ async def create_template(
         },
         403: {
             "model": HTTPErrorResponse,
-            "description": "Предоставленный токен не списке разрешенных",
+            "description": "Предоставленный токен не в списке разрешенных",
         },
         500: {
             "model": HTTPErrorResponse,
@@ -156,7 +156,7 @@ async def update_template(
         },
         403: {
             "model": HTTPErrorResponse,
-            "description": "Предоставленный токен не списке разрешенных",
+            "description": "Предоставленный токен не в списке разрешенных",
         },
         500: {
             "model": HTTPErrorResponse,
@@ -201,7 +201,7 @@ async def delete_template(
         },
         403: {
             "model": HTTPErrorResponse,
-            "description": "Предоставленный токен не списке разрешенных",
+            "description": "Предоставленный токен не в списке разрешенных",
         },
         500: {
             "model": HTTPErrorResponse,
@@ -252,7 +252,7 @@ async def get_template(
         },
         403: {
             "model": HTTPErrorResponse,
-            "description": "Предоставленный токен не списке разрешенных",
+            "description": "Предоставленный токен не в списке разрешенных",
         },
         404: {
             "model": HTTPErrorResponse,

@@ -31,7 +31,6 @@ class TemplatesService:
         # {{ my_variable|default('my_variable is not defined') }}
         try:
             # Проверяем корректность шаблона. Выдаст ошибку, есть что-то не понравится
-            # template = self._repository.parse_html(template_input)
             (
                 mandatory_parameters,
                 optional_parameters,
@@ -54,7 +53,7 @@ class TemplatesService:
             if template_exists:
                 raise HTTPException(
                     status_code=HTTPStatus.CONFLICT,
-                    detail="Данный шаблон уже существует. В можете его изменить через другой запрос.",
+                    detail="Данный шаблон уже существует. Вы можете его изменить через другой запрос.",
                 )
 
             template_id = await self._repository.create_template(template)
