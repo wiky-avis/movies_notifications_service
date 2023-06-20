@@ -17,3 +17,10 @@ class NotificationsRepository:
             queries.GET_DELIVERY, delivery_id
         )
         return DeliveryModel.parse_obj(row_data) if row_data else None
+
+    async def set_excluded_delivery(
+        self, exclude_reason: str, delivery_id: int
+    ):
+        return await self._db.pool.execute(
+            queries.SET_EXCLUDED_DELIVERY, exclude_reason, delivery_id
+        )

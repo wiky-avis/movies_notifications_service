@@ -38,3 +38,8 @@ class DeliveryModel(BaseModel):
     status: Optional[str] = None
     created_dt: Optional[datetime] = None
     updated_dt: Optional[datetime] = None
+
+
+class ExcludeReasonEnum(str, Enum):
+    # Пользователь отписался от рассылок
+    USER_UNSUBSCRIBED = "user_unsubscribed"

@@ -3,3 +3,8 @@ GET_DELIVERY = """
     FROM deliveries
     WHERE delivery_id=$1;
 """
+
+SET_EXCLUDED_DELIVERY = """
+    UPDATE deliveries SET excluded = true, exclude_reason = $1, updated_dt = now()
+    WHERE delivery_id = $2;
+"""
