@@ -35,6 +35,6 @@ DELIVERY_TRIGGER_STARTER_SENDER = {
     ),
     "exchange": os.getenv(
         "DELIVERY_TRIGGER_STARTER_SENDER_EXCHANGE",
-        default="notifications_sender.message_sending",
+        default="notifications_sender.send_delivery",
     ),
 }

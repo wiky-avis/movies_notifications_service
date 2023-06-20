@@ -2,6 +2,7 @@ import os
 import socket
 
 from pydantic import AmqpDsn, BaseSettings, PositiveInt
+from settings.base import BaseConfig
 from settings.sender import NotificationsEnricherAmqpSender
 from settings.services import AuthApiSettings
 
@@ -15,14 +16,6 @@ class BaseConsumerSettings(BaseSettings):
     routing_key: str
     prefetch_count: PositiveInt = 5
     timeout: PositiveInt = 5
-
-
-class BaseConfig(BaseSettings):
-    class Config:
-        env_nested_delimiter = "__"
-        use_enum_values = True
-
-    debug: bool = False
 
 
 class NotificationsEnricherConfig(BaseConfig):
