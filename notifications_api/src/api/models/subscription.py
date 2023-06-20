@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional
 
-from notifications_api.src.api.models.base import ORDJSONModelMixin
+from src.api.models.base import ORDJSONModelMixin
 
 
 class ChannelType(str, Enum):

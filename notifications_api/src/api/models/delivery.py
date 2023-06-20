@@ -3,9 +3,13 @@ from enum import Enum
 from typing import Optional
 
 from pydantic import Field
+from src.api.models.base import ORDJSONModelMixin
 from typing_extensions import TypedDict
 
-from notifications_api.src.api.models.base import ORDJSONModelMixin
+
+class EventType(str, Enum):
+    CREATED = "created"
+    SEND = "send"
 
 
 class DeliveryStatus(str, Enum):

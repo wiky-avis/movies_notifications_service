@@ -7,10 +7,11 @@ class NotificationsAmqpSender(BaseSettings):
         default="amqp://user:pass@127.0.0.1:8030/test",
     )
     exchange: str = Field(
-        env="NOTIFICATIONS_SENDER_EXCHANGE", default="notifications"
+        env="NOTIFICATIONS_SENDER_EXCHANGE",
+        default="notifications_api.created_delivery",
     )
     routing_key: str = Field(
-        env="NOTIFICATIONS_SENDER_ROUTING_KEY", default="delivery.created"
+        env="NOTIFICATIONS_SENDER_ROUTING_KEY", default="event.created"
     )
 
     class Config:

@@ -1,7 +1,6 @@
 import pytest_asyncio
 from httpx import AsyncClient
-
-from notifications_api.src.app import app
+from src.app import app
 
 
 @pytest_asyncio.fixture

@@ -1,6 +1,6 @@
 from logging import config as logging_config
 
-from notifications_api.src.settings import settings
+from src.settings import settings
 
 
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

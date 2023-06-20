@@ -2,15 +2,11 @@ import logging
 from typing import Optional
 
 from asyncpg import UniqueViolationError
-
-from notifications_api.src.api.models.delivery import (
-    DeliveryModel,
-    DeliveryResponse,
-)
-from notifications_api.src.api.models.subscription import UserSubscriptionInput
-from notifications_api.src.common.connectors.db import DbConnector
-from notifications_api.src.common.exceptions import DatabaseError
-from notifications_api.src.common.repositories import queries
+from src.api.models.delivery import DeliveryModel, DeliveryResponse
+from src.api.models.subscription import UserSubscriptionInput
+from src.common.connectors.db import DbConnector
+from src.common.exceptions import DatabaseError
+from src.common.repositories import queries
 
 
 logger = logging.getLogger(__name__)

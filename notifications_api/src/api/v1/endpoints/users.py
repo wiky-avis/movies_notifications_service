@@ -1,12 +1,9 @@
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Body, Depends
-
-from notifications_api.src.api.models.subscription import UserSubscriptionInput
-from notifications_api.src.common.responses import ApiResponse, wrap_response
-from notifications_api.src.common.services.subscription import (
-    UserSubscriptionService,
-)
-from notifications_api.src.containers import Container
+from src.api.models.subscription import UserSubscriptionInput
+from src.common.responses import ApiResponse, wrap_response
+from src.common.services.subscription import UserSubscriptionService
+from src.containers import Container
 
 
 router = APIRouter()

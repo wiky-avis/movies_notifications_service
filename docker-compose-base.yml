@@ -26,9 +26,9 @@ services:
 
   migration:
     build:
-      context: ./.
-      dockerfile: notifications_db/Dockerfile
-    command: bash -c "yoyo apply --database ${DATABASE_URL} /notifications_db/migrations -b"
+      context: ./notifications_db
+      dockerfile: ./Dockerfile
+    command: bash -c "yoyo apply --database ${DATABASE_URL} ./migrations -b"
     env_file:
       - ./.env
     depends_on:
@@ -44,8 +44,20 @@ services:
 
   notifications_api:
     build:
-      context: ./.
-      dockerfile: notifications_api/Dockerfile
+      context: ./notifications_api
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./.env
+    networks:
+      - custom
+
+  consumers:
+    build:
+      context: ./notification_controller
+      dockerfile: ./Dockerfile
+    command: "python ./manage.py run-consumers"
+    depends_on:
+      - "db"
     env_file:
       - ./.env
     networks:

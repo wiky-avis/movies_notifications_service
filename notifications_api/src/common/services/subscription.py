@@ -3,12 +3,9 @@ from typing import Optional
 
 from asyncpg import UniqueViolationError
 from fastapi import HTTPException
-
-from notifications_api.src.api.models.subscription import UserSubscriptionInput
-from notifications_api.src.common.exceptions import DatabaseError
-from notifications_api.src.common.repositories.notifications import (
-    NotificationsRepository,
-)
+from src.api.models.subscription import UserSubscriptionInput
+from src.common.exceptions import DatabaseError
+from src.common.repositories.notifications import NotificationsRepository
 
 
 class UserSubscriptionService:

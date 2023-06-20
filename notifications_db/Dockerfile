@@ -1,7 +1,12 @@
 FROM python:3.11-slim
 
-RUN mkdir /notifications_db
-RUN pip3 install psycopg2-binary yoyo-migrations==8.2.0
-WORKDIR /notifications_db
+WORKDIR /code
 
-COPY ./notifications_db/migrations ./migrations/
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN pip3 install psycopg2-binary yoyo-migrations==8.2.0
+
+COPY ./migrations ./migrations/
+
+COPY . /code
