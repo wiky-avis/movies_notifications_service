@@ -1,6 +1,6 @@
 from settings import DELIVERY_TRIGGER_STARTER, DeliveryTriggerStarterConfig
 from settings.sender import DELIVERY_TRIGGER_STARTER_SENDER
-from src.workers.cron.delivery_trigger_starter.runner import (
+from src.workers.cron.runner import (
     application,
     bootstrap,
 )
