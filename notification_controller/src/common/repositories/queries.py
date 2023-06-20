@@ -26,6 +26,6 @@ CREATE_DELIVERY_DISTRIBUTION = """
 """
 
 SET_DISTRIBUTIONS_STATUS = """
-    UPDATE delivery_distributions SET status = $1, updated_dt = now()
-    WHERE delivery_id = $2;
+    UPDATE delivery_distributions SET status = $1, errors = $2, updated_dt = now()
+    WHERE delivery_id = $3;
 """

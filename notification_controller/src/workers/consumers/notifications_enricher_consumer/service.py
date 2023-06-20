@@ -34,14 +34,13 @@ class NotificationsEnricherService:
 
     async def main(self, body: bytes) -> None:
         delivery_event = self._load_model(body)
-        print("---DELIVERY", delivery_event)
 
-        delivery_data = await self._repository._get_delivery_data(
+        delivery_data = await self._repository.get_delivery_data(
             delivery_id=delivery_event.delivery_id
         )
         if not delivery_data:
             logger.warning(
-                "Delivery no found: delivery_id %s",
+                "Delivery not found: delivery_id %s",
                 delivery_event.delivery_id,
                 exc_info=True,
             )
@@ -53,8 +52,12 @@ class NotificationsEnricherService:
             await self._repository.create_delivery_distribution(delivery_data)
             await self.send_message(delivery_data.delivery_id)
 
-    async def _enrich_delivery_data(self, delivery_data: DeliveryModel):
-        recipient_id = dpath.get(delivery_data.recipient, "user_id", default=None)
+    async def _enrich_delivery_data(
+        self, delivery_data: DeliveryModel
+    ) -> None:
+        recipient_id = dpath.get(
+            delivery_data.recipient, "user_id", default=None
+        )
         user_unsubscribed = await self._repository.check_user_unsubscription(
             recipient_id
         )
@@ -63,12 +66,19 @@ class NotificationsEnricherService:
                 exclude_reason=ExcludeReasonEnum.USER_UNSUBSCRIBED,
                 delivery_id=delivery_data.delivery_id,
             )
+            logger.warning(
+                "Excluded delivery %s. User unsubscribed: recipient_id %s, reason %s channel_type %s",
+                delivery_data.delivery_id,
+                recipient_id,
+                user_unsubscribed.reason,
+                user_unsubscribed.channel_type,
+            )
             return
 
         user_info = await self.get_user_info(recipient_id)  # type: ignore[arg-type]
         if not user_info:
             logger.warning(
-                "User no found: recipient_id %s",
+                "User not found: user_id %s",
                 recipient_id,
                 exc_info=True,
             )
@@ -85,13 +95,13 @@ class NotificationsEnricherService:
             delivery_data.recipient, tz, delivery_data.delivery_id
         )
 
-    async def get_user_info(self, recipient_id: str):
+    async def get_user_info(self, user_id: str) -> Optional[dict]:
         try:
-            user = self._auth_api_client.get_user_by_id(recipient_id)
+            user = await self._auth_api_client.get_user_by_id(user_id)
         except (BadRequestError, ServiceError, ClientError):
             logger.warning(
                 "Getting user info error: user_id %s",
-                recipient_id,
+                user_id,
                 exc_info=True,
             )
             return
@@ -99,21 +109,22 @@ class NotificationsEnricherService:
 
     async def send_message(self, delivery_id: int) -> None:
         try:
-            await self._amqp_pika_sender.amqp_sender.send(  # type: ignore
+            await self._amqp_sender.amqp_sender.send(  # type: ignore
                 message={
                     "delivery_id": delivery_id,
                     "event": EventType.SEND,
                 },
                 routing_key="event.send",
             )
-        except Exception:
+        except Exception as error:
+            errors = dict(notifications_enricher_amqp_sender=str(error))
             logger.exception(
                 "Fail to send message: delivery_id %s",
                 delivery_id,
                 exc_info=True,
             )
-            await self._repository.create_delivery_distribution(
-                delivery_id, DeliveryStatus.FAILED
+            await self._repository.set_delivery_distribution_status(
+                delivery_id, DeliveryStatus.FAILED, errors
             )
 
     @staticmethod

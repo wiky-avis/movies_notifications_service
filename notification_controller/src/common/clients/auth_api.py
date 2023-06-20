@@ -24,20 +24,7 @@ class AuthApiClient(AsyncClient):
         response_body = await self.get(
             url=url, headers=self.default_headers, params=params
         )
-        # response = response_body.json()
-        # TODO: удалить
-        response = {
-            "success": True,
-            "error": None,
-            "result": {
-                "id": "73c9c344-5230-478d-95bf-b100f8569440",
-                "email": "123@123.ru",
-                "roles": ["ROLE_PORTAL_USER"],
-                "verified_mail": True,
-                "registered_on": "2023-06-20 07:13:22",
-                "tz": "-8",
-            },
-        }
+        response = response_body.json()
         return dpath.get(response, "result", default=None)  # type: ignore
 
 
