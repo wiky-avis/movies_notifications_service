@@ -3,14 +3,12 @@ from http import HTTPStatus
 from typing import Optional
 
 from fastapi import HTTPException
-from src.api.models.delivery import DeliveryModel, DeliveryResponse
+from src.api.models.delivery import DeliveryModel, DeliveryResponse, EventType
 from src.common.connectors.amqp import AMQPSenderPikaConnector
 from src.common.exceptions import DatabaseError
 from src.common.repositories.notifications import NotificationsRepository
 from src.settings import notifications_amqp_settings
 from starlette import status
-
-from notifications_api.src.api.models.delivery import EventType
 
 
 logger = logging.getLogger(__name__)

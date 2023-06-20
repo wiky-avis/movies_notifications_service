@@ -7,9 +7,8 @@ from src.common.clients.auth_api import AuthApiClient
 from src.common.connectors.amqp import AMQPSenderPikaConnector
 from src.common.exceptions import BadRequestError, ClientError, ServiceError
 from src.common.repositories.notifications import NotificationsRepository
-from src.workers.models.delivery import DeliveryEventModel
-
-from notification_controller.src.workers.models.delivery import (
+from src.workers.models.delivery import (
+    DeliveryEventModel,
     DeliveryModel,
     DeliveryStatus,
     DeliveryType,

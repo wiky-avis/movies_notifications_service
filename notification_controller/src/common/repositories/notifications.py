@@ -3,10 +3,8 @@ from typing import Optional
 
 from src.common.connectors.db import DbConnector
 from src.common.repositories import queries
-from src.workers.models.delivery import DeliveryModel
+from src.workers.models.delivery import DeliveryModel, DeliveryStatus
 from src.workers.models.recipient import UserUnsubscriptionModel
-
-from notification_controller.src.workers.models.delivery import DeliveryStatus
 
 
 logger = logging.getLogger(__name__)
