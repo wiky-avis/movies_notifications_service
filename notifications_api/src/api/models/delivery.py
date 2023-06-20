@@ -7,6 +7,11 @@ from src.api.models.base import ORDJSONModelMixin
 from typing_extensions import TypedDict
 
 
+class EventType(str, Enum):
+    CREATED = "created"
+    SEND = "send"
+
+
 class DeliveryStatus(str, Enum):
     # создано
     CREATED = "created"

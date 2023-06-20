@@ -10,6 +10,8 @@ from src.common.repositories.notifications import NotificationsRepository
 from src.settings import notifications_amqp_settings
 from starlette import status
 
+from notifications_api.src.api.models.delivery import EventType
+
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +41,10 @@ class NotificationsService:
     async def send_message(self, delivery_id: int) -> None:
         try:
             await self._amqp_pika_sender.amqp_sender.send(  # type: ignore
-                message={"delivery_id": delivery_id},
+                message={
+                    "delivery_id": delivery_id,
+                    "event": EventType.CREATED,
+                },
                 exchange=notifications_amqp_settings.exchange,
                 routing_key=notifications_amqp_settings.routing_key,
             )
