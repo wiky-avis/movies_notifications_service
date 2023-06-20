@@ -1,3 +1,4 @@
+import dpath
 from httpx import AsyncClient
 from settings.services import AuthApiSettings
 
@@ -23,7 +24,8 @@ class AuthApiClient(AsyncClient):
         response_body = await self.get(
             url=url, headers=self.default_headers, params=params
         )
-        return response_body.json()
+        response = response_body.json()
+        return dpath.get(response, "result", default=None)  # type: ignore
 
 
 def resolve_auth_api_client(config: AuthApiSettings):

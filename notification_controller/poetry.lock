@@ -271,6 +271,18 @@ files = [
 python-dateutil = "*"
 
 [[package]]
+name = "dpath"
+version = "2.1.5"
+description = "Filesystem-like pathing and searching for dictionaries"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "dpath-2.1.5-py3-none-any.whl", hash = "sha256:559edcbfc806ca2f9ad9e63566f22e5d41c000e4215bbce9dbf1ca4c859f5e0b"},
+    {file = "dpath-2.1.5.tar.gz", hash = "sha256:ccd964db839baad4aa820612b4b8731b09f40a245d401b723156ce4ef45b22b7"},
+]
+
+[[package]]
 name = "exceptiongroup"
 version = "1.1.1"
 description = "Backport of PEP 654 (exception groups)"
@@ -1088,4 +1100,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "e7ae5ca6d7198168c80e5240ce333691dc66a41ee6e43cfa2f10f1728f859320"
+content-hash = "c84005f623230c052929986cd2f97094e5d5d97797a425e0359512764eabb68c"
