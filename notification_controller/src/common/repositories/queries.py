@@ -18,7 +18,7 @@ GET_USER_UNSUBSCRIPTION = """
 GET_READY_TO_SEND_DELIVERIES = """
     SELECT delivery_id, recipient
     FROM deliveries
-    WHERE excluded = FALSE AND type = 'not_night' AND CAST(tz AS INTEGER) BETWEEN $1 AND $2
+    WHERE NOT excluded AND type = 'not_night' AND CAST(tz AS INTEGER) BETWEEN $1 AND $2
     ORDER BY updated_dt;
 """
 
