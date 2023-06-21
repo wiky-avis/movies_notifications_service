@@ -31,7 +31,7 @@ def create_app() -> FastAPI:
             HTTPException: http_exception_handler,
             RequestValidationError: request_validation_exception_handler,
         },
-        title="test",
+        title="Notifications Api",
         openapi_url="/openapi.json",
         docs_url="/api/swagger",
         openapi_prefix="",

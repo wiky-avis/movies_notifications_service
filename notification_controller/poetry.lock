@@ -202,7 +202,7 @@ uvloop = ["uvloop (>=0.15.2)"]
 name = "certifi"
 version = "2023.5.7"
 description = "Python package for providing Mozilla's CA Bundle."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -337,7 +337,7 @@ pyflakes = ">=3.0.0,<3.1.0"
 name = "h11"
 version = "0.14.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -349,7 +349,7 @@ files = [
 name = "httpcore"
 version = "0.17.2"
 description = "A minimal low-level HTTP client."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -371,7 +371,7 @@ socks = ["socksio (>=1.0.0,<2.0.0)"]
 name = "httpx"
 version = "0.24.1"
 description = "The next generation HTTP client."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -843,6 +843,21 @@ files = [
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "respx"
+version = "0.20.1"
+description = "A utility for mocking out the Python HTTPX and HTTP Core libraries."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "respx-0.20.1-py2.py3-none-any.whl", hash = "sha256:372f06991c03d1f7f480a420a2199d01f1815b6ed5a802f4e4628043a93bd03e"},
+    {file = "respx-0.20.1.tar.gz", hash = "sha256:cc47a86d7010806ab65abdcf3b634c56337a737bb5c4d74c19a0dfca83b3bc73"},
+]
+
+[package.dependencies]
+httpx = ">=0.21.0"
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -1100,4 +1115,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c84005f623230c052929986cd2f97094e5d5d97797a425e0359512764eabb68c"
+content-hash = "cf3f6e0e9038978be97cd9f892536e556a451962710b0e9cb9bce271ef293fd3"
