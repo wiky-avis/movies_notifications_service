@@ -43,3 +43,12 @@ class DeliveryModel(BaseModel):
 class ExcludeReasonEnum(str, Enum):
     # Пользователь отписался от рассылок
     USER_UNSUBSCRIBED = "user_unsubscribed"
+
+
+class DeliveryStatus(str, Enum):
+    # создано
+    CREATED = "created"
+    # отправлено
+    SENT = "sent"
+    # не отправлено
+    FAILED = "failed"

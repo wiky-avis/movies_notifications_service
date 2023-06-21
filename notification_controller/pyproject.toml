@@ -23,6 +23,7 @@ dpath = "2.1.5"
 pytest = "7.3.2"
 pytest-asyncio = "0.21.0"
 httpx = "0.24.1"
+respx = "0.20.1"
 # linters
 black = "23.3.0"
 isort = "5.12.0"

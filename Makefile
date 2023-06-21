@@ -10,6 +10,7 @@ isort:
 mypy:
 	mypy notifications_api --explicit-package-bases
 	mypy templates_service --explicit-package-bases
+	mypy notification_controller --explicit-package-bases
 
 
 linters: isort black flake8 mypy
@@ -20,7 +21,13 @@ poetry-export:
 unit-tests-admin-panel:
 	python3 -m pytest admin_panel/tests/src/unit
 
-unit-tests: unit-tests-admin-panel
+unit-tests-notifications-api:
+	python3 -m pytest notifications_api/tests
+
+unit-tests-notification-controller:
+	python3 -m pytest notification_controller/tests
+
+unit-tests: unit-tests-admin-panel unit-tests-notifications-api unit-tests-notification-controller
 
 up-prod:
 	docker-compose -f docker-compose-base.yml -f docker-compose-prod.yml up --build
