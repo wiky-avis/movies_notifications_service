@@ -1,1 +1,1 @@
-FROM_TZ, TO_TZ = -7, 6
+FROM_TZ, TO_TZ = -3, 12

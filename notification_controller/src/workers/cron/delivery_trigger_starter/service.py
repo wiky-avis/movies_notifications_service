@@ -47,5 +47,7 @@ class DeliveryTriggerStarterService:
                 exc_info=True,
             )
             await self._repository.set_delivery_distribution_status(
-                delivery_id, DeliveryStatus.FAILED, errors
+                status=DeliveryStatus.FAILED,
+                delivery_id=delivery_id,
+                errors=errors,
             )

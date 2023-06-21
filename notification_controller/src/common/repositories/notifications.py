@@ -3,7 +3,11 @@ from typing import Optional
 
 from src.common.connectors.db import DbConnector
 from src.common.repositories import queries
-from src.workers.models.delivery import DeliveryModel, DeliveryStatus, ReadyToSendDeliveryModel
+from src.workers.models.delivery import (
+    DeliveryModel,
+    DeliveryStatus,
+    ReadyToSendDeliveryModel,
+)
 from src.workers.models.recipient import UserUnsubscriptionModel
 
 
