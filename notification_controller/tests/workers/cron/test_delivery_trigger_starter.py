@@ -1,8 +1,12 @@
+from unittest.mock import AsyncMock
+
 import pytest
+from src.common.connectors.amqp import AMQPSenderPikaConnector
 from src.workers.models.delivery import (
     DeliveryChannel,
     DeliveryStatus,
     DeliveryType,
+    EventType,
 )
 from tests.vars.tables import NOTIFICATIONS_TABLES
 
@@ -20,14 +24,16 @@ async def test_delivery_trigger_starter_ok(
             RETURNING delivery_id;
         """,
         123,
-        {"user_id": "f51f3683-7758-402e-9cf4-785f840d8738"},
+        {
+            "user_id": "f51f3683-7758-402e-9cf4-785f840d8738",
+            "email": "123@123.ru",
+        },
         {"age": "60", "subject": "Приветственное письмо", "username": "vasya"},
         DeliveryChannel.EMAIL.value,
         DeliveryType.NOT_NIGHT.value,
         "ugc_service",
         "+3",
     )
-
     delivery = await test_database.pool.fetchrow(
         """SELECT *
             FROM deliveries
@@ -36,28 +42,38 @@ async def test_delivery_trigger_starter_ok(
     )
     assert delivery["delivery_id"] == delivery_id
     assert delivery["recipient"] == {
-        "user_id": "f51f3683-7758-402e-9cf4-785f840d8738"
+        "user_id": "f51f3683-7758-402e-9cf4-785f840d8738",
+        "email": "123@123.ru",
     }
     assert delivery["tz"] == "+3"
 
-    distribution_id = await test_database.pool.fetchval(
-        """INSERT INTO delivery_distributions (delivery_id, recipient, status)
-            VALUES ($1, $2, $3)
-            RETURNING id;
-        """,
-        delivery_id,
-        delivery["recipient"],
-        DeliveryStatus.CREATED,
+    message = {"delivery_id": delivery_id, "event": EventType.CREATED}
+
+    async def mock(*args, **kwargs):
+        sender = AMQPSenderPikaConnector(config={})
+        sender.amqp_sender = AsyncMock()
+        sender.setup = AsyncMock()
+        await sender.amqp_sender.send(
+            message=message,
+            routing_key="event.send",
+        )
+
+    monkeypatch.setattr(
+        "src.workers.cron.delivery_trigger_starter.service.DeliveryTriggerStarterService.send_message",
+        mock,
     )
+
+    await delivery_trigger_starter_service.main()
 
     distribution = await test_database.pool.fetchrow(
         """SELECT *
             FROM delivery_distributions
-            WHERE id = $1
+            WHERE delivery_id = $1
         """,
-        distribution_id,
+        delivery_id,
     )
     assert distribution["recipient"] == {
-        "user_id": "f51f3683-7758-402e-9cf4-785f840d8738"
+        "user_id": "f51f3683-7758-402e-9cf4-785f840d8738",
+        "email": "123@123.ru",
     }
     assert distribution["status"] == DeliveryStatus.CREATED
