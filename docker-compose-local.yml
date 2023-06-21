@@ -22,6 +22,11 @@ services:
       - NOTIFICATIONS_ENRICHER_CONSUMER_AMQP_URL=amqp://user:pass@rabbitmq:5672/test
       - NOTIFICATIONS_ENRICHER_SENDER_AMQP_URL=amqp://user:pass@rabbitmq:5672/test
 
+  daemons:
+    environment:
+      - DATABASE_URL=postgresql://app:123qwe@db:5432/notifications
+      - DELIVERY_TRIGGER_STARTER_SENDER_AMQP_URL=amqp://user:pass@rabbitmq:5672/test
+
   redis:
     ports:
       - '6379:6379'

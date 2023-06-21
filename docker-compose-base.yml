@@ -63,6 +63,18 @@ services:
     networks:
       - custom
 
+  daemons:
+    build:
+      context: ./notification_controller
+      dockerfile: .Dockerfile
+    command: "python ./manage.py run-daemons"
+    depends_on:
+      - "db"
+    env_file:
+      - ./.env
+    networks:
+      - custom
+
   templates_service:
     build:
       context: ./.
