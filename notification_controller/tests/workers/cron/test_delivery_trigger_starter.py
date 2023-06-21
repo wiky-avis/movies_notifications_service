@@ -1,13 +1,14 @@
+import asyncio
 from unittest.mock import AsyncMock
 
 import pytest
 from src.common.connectors.amqp import AMQPSenderPikaConnector
 from src.workers.models.delivery import (
     DeliveryChannel,
-    DeliveryStatus,
     DeliveryType,
     EventType,
 )
+from tests.vars.constants import DELIVERIES
 from tests.vars.tables import NOTIFICATIONS_TABLES
 
 
@@ -18,62 +19,66 @@ async def test_delivery_trigger_starter_ok(
     monkeypatch,
     delivery_trigger_starter_service,
 ):
-    delivery_id = await test_database.pool.fetchval(
-        """INSERT INTO deliveries(template_id, recipient, parameters, channel, "type", sender, tz)
+    tasks = [
+        test_database.pool.execute(
+            """INSERT INTO deliveries(template_id, recipient, parameters, channel, "type", sender, tz)
             VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING delivery_id;
         """,
-        123,
-        {
-            "user_id": "f51f3683-7758-402e-9cf4-785f840d8738",
-            "email": "123@123.ru",
-        },
-        {"age": "60", "subject": "Приветственное письмо", "username": "vasya"},
-        DeliveryChannel.EMAIL.value,
-        DeliveryType.NOT_NIGHT.value,
-        "ugc_service",
-        "+3",
-    )
-    delivery = await test_database.pool.fetchrow(
-        """SELECT *
-            FROM deliveries
-            WHERE excluded = FALSE AND type = 'not_night' AND CAST(tz AS INTEGER) BETWEEN -7 AND 6
-        """
-    )
-    assert delivery["delivery_id"] == delivery_id
-    assert delivery["recipient"] == {
-        "user_id": "f51f3683-7758-402e-9cf4-785f840d8738",
-        "email": "123@123.ru",
-    }
-    assert delivery["tz"] == "+3"
-
-    message = {"delivery_id": delivery_id, "event": EventType.CREATED}
-
-    async def mock(*args, **kwargs):
-        sender = AMQPSenderPikaConnector(config={})
-        sender.amqp_sender = AsyncMock()
-        sender.setup = AsyncMock()
-        await sender.amqp_sender.send(
-            message=message,
-            routing_key="event.send",
+            delivery["template_id"],
+            delivery["recipient"],
+            delivery["parameters"],
+            DeliveryChannel.EMAIL.value,
+            DeliveryType.NOT_NIGHT.value,
+            "ugc_service",
+            delivery["tz"],
         )
+        for delivery in DELIVERIES
+    ]
 
-    monkeypatch.setattr(
-        "src.workers.cron.delivery_trigger_starter.service.DeliveryTriggerStarterService.send_message",
-        mock,
-    )
+    await asyncio.gather(*tasks)
+
+    for delivery_id in tasks:
+        message = {"delivery_id": delivery_id, "event": EventType.SEND}
+
+        async def mock(*args, **kwargs):
+            sender = AMQPSenderPikaConnector(config={})
+            sender.amqp_sender = AsyncMock()
+            sender.setup = AsyncMock()
+            await sender.amqp_sender.send(
+                message=message,
+                routing_key="event.send",
+            )
+
+        monkeypatch.setattr(
+            "src.workers.cron.delivery_trigger_starter.service.DeliveryTriggerStarterService.send_message",
+            mock,
+        )
 
     await delivery_trigger_starter_service.main()
 
-    distribution = await test_database.pool.fetchrow(
+    data = await test_database.pool.fetch(
         """SELECT *
             FROM delivery_distributions
-            WHERE delivery_id = $1
-        """,
-        delivery_id,
+            ORDER BY recipient;
+        """
     )
-    assert distribution["recipient"] == {
-        "user_id": "f51f3683-7758-402e-9cf4-785f840d8738",
-        "email": "123@123.ru",
-    }
-    assert distribution["status"] == DeliveryStatus.CREATED
+    distributions = [item["recipient"] for item in data]
+    assert distributions == [
+        {
+            "email": "test4@ya.ru",
+            "user_id": "e47f4f3e-9ae0-45c8-81fa-b3de71c7e478",
+        },
+        {
+            "email": "test7@ya.ru",
+            "user_id": "6735bf49-7add-4411-807c-36f5549a189d",
+        },
+        {
+            "email": "test8@ya.ru",
+            "user_id": "3faf86b5-202d-4ef6-a46c-3831a77f7b6a",
+        },
+        {
+            "email": "test9@ya.ru",
+            "user_id": "f51f3683-7758-402e-9cf4-785f840d8738",
+        },
+    ]

@@ -66,7 +66,7 @@ services:
   daemons:
     build:
       context: ./notification_controller
-      dockerfile: .Dockerfile
+      dockerfile: ./Dockerfile
     command: "python ./manage.py run-daemons"
     depends_on:
       - "db"
