@@ -32,7 +32,7 @@ class BaseDaemon(aiomisc.Service):
     async def start(self):
         logger.info("%s service start.", self.__class__.__name__)
 
-    async def stop(self, exception: Exception = None):  # noqa: U100
+    async def stop(self, exception: Exception = None):  # type: ignore
         logger.info("%s service stop.", self.__class__.__name__)
 
     async def startup(self):

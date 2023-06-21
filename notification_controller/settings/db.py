@@ -8,7 +8,7 @@ load_dotenv()
 class DBSettings(BaseSettings):
     db_url: str = Field(
         env="DATABASE_URL",
-        default="postgresql://postgres:dbpass@localhost:6666/test_db",
+        default="postgresql://app:123qwe@localhost:6666/notifications",
     )
 
     class Config:

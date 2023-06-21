@@ -35,12 +35,12 @@ class NotificationsEnricherService:
         delivery_event = self._load_model(body)
 
         delivery_data = await self._repository.get_delivery_data(
-            delivery_id=delivery_event.delivery_id
+            delivery_id=delivery_event.delivery_id  # type: ignore
         )
         if not delivery_data:
             logger.warning(
                 "Delivery not found: delivery_id %s",
-                delivery_event.delivery_id,
+                delivery_event.delivery_id,  # type: ignore
                 exc_info=True,
             )
             return
@@ -103,7 +103,7 @@ class NotificationsEnricherService:
                 user_id,
                 exc_info=True,
             )
-            return
+            return  # type: ignore
         return user
 
     async def send_message(self, delivery_id: int) -> None:
@@ -127,7 +127,7 @@ class NotificationsEnricherService:
             )
 
     @staticmethod
-    def _load_model(
+    def _load_model(  # type: ignore
         body: bytes,
     ) -> Optional[DeliveryEventModel]:
         try:

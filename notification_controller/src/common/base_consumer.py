@@ -14,9 +14,9 @@ class BaseConsumer(aiomisc.Service):
     def __init__(self, config: BaseConsumerSettings):
         super().__init__()
         self._config = config
-        self._connection: aio_pika.RobustConnection = None
-        self._channel: aio_pika.RobustChannel = None
-        self._queue: aio_pika.RobustQueue = None
+        self._connection: aio_pika.RobustConnection = None  # type: ignore
+        self._channel: aio_pika.RobustChannel = None  # type: ignore
+        self._queue: aio_pika.RobustQueue = None  # type: ignore
 
     @property
     def consumer(self):
@@ -33,7 +33,7 @@ class BaseConsumer(aiomisc.Service):
             self._process_message, consumer_tag=self._config.consumer_tag
         )
 
-    async def stop(self, exception: Exception = None):  # noqa: U100
+    async def stop(self, exception: Exception = None):  # type: ignore
         await self._queue.cancel(consumer_tag=self._config.consumer_tag)
         logger.info(
             "%s service stop to consume messages.", self.__class__.__name__
