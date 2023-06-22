@@ -1,13 +1,14 @@
+import subprocess
+from urllib.parse import urlsplit
+
 import asyncpg
 import psycopg2
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient
-import subprocess
-from urllib.parse import urlsplit
-
 from src.app import create_app
 from src.common.connectors.db import register_json
+
 
 DATABASE_URL = "postgresql://app:123qwe@localhost:6666/notifications"
 
