@@ -20,3 +20,6 @@ DELIVERY_TRIGGER_STARTER = {
     "name": "delivery_trigger_starter",
     "cron": os.getenv("DELIVERY_TRIGGER_CRON", default="* * * * *"),
 }
+
+FROM_TZ = os.getenv("FROM_TZ", default=-3)
+TO_TZ = os.getenv("TO_TZ", default=12)

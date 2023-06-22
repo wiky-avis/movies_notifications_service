@@ -1,8 +1,8 @@
 import logging
 
+from settings import FROM_TZ, TO_TZ
 from src.common.connectors.amqp import AMQPSenderPikaConnector
 from src.common.repositories.notifications import NotificationsRepository
-from src.workers.cron.delivery_trigger_starter.constants import FROM_TZ, TO_TZ
 from src.workers.models.delivery import DeliveryStatus, EventType
 
 

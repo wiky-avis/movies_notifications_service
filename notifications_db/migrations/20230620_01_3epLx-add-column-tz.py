@@ -12,6 +12,11 @@ steps = [
             set lock_timeout to '5s';
             ALTER TABLE deliveries
             ADD COLUMN tz varchar NULL
+        """,
         """
+            set lock_timeout to '5s';
+            ALTER TABLE deliveries
+            DROP COLUMN tz
+        """,
     )
 ]

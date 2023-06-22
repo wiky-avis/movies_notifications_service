@@ -19,7 +19,7 @@ GET_READY_TO_SEND_DELIVERIES = """
     SELECT delivery_id, recipient
     FROM deliveries
     WHERE NOT excluded AND type = 'not_night' AND CAST(tz AS INTEGER) BETWEEN $1 AND $2
-    ORDER BY updated_dt;
+    ORDER BY created_dt;
 """
 
 CREATE_DELIVERY_DISTRIBUTION = """
