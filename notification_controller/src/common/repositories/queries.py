@@ -10,9 +10,21 @@ SET_EXCLUDED_DELIVERY = """
 """
 
 GET_USER_UNSUBSCRIPTION = """
-SELECT id, user_id, reason, channel_type, created_dt
-FROM unsubscribed_users
-WHERE user_id=$1;
+    SELECT id, user_id, reason, channel_type, created_dt
+    FROM unsubscribed_users
+    WHERE user_id=$1;
+"""
+
+GET_READY_TO_SEND_DELIVERIES = """
+    SELECT delivery_id, recipient
+    FROM deliveries
+    WHERE NOT excluded AND type = 'not_night' AND CAST(tz AS INTEGER) BETWEEN $1 AND $2
+    ORDER BY created_dt;
+"""
+
+CREATE_DELIVERY_DISTRIBUTION = """
+    INSERT INTO delivery_distributions (delivery_id, recipient, status)
+    VALUES ($1, $2, $3) RETURNING id;
 """
 
 UPDATE_DELIVERY = """

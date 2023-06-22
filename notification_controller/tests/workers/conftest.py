@@ -11,6 +11,9 @@ from src.common.repositories.notifications import NotificationsRepository
 from src.workers.consumers.notifications_enricher_consumer.service import (
     NotificationsEnricherService,
 )
+from src.workers.cron.delivery_trigger_starter.service import (
+    DeliveryTriggerStarterService,
+)
 
 
 @pytest.fixture
@@ -54,6 +57,25 @@ def notifications_enricher_service(
     container.register(service=NotificationsEnricherService)
 
     yield container.resolve(NotificationsEnricherService)
+
+
+@pytest.fixture
+def delivery_trigger_starter_service(
+    test_database,
+) -> DeliveryTriggerStarterService:
+    container = punq.Container()
+
+    container.register(service=DbConnector, instance=test_database)
+
+    container.register(
+        service=AMQPSenderPikaConnector,
+        instance=resolve_amqp_sender_connector,
+    )
+
+    container.register(service=NotificationsRepository)
+    container.register(service=DeliveryTriggerStarterService)
+
+    yield container.resolve(DeliveryTriggerStarterService)
 
 
 @pytest.fixture

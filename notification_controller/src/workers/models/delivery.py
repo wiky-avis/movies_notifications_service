@@ -52,3 +52,8 @@ class DeliveryStatus(str, Enum):
     SENT = "sent"
     # не отправлено
     FAILED = "failed"
+
+
+class ReadyToSendDeliveryModel(BaseModel):
+    delivery_id: int
+    recipient: Optional[dict] = None

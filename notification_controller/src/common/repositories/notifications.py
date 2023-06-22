@@ -3,7 +3,11 @@ from typing import Optional
 
 from src.common.connectors.db import DbConnector
 from src.common.repositories import queries
-from src.workers.models.delivery import DeliveryModel, DeliveryStatus
+from src.workers.models.delivery import (
+    DeliveryModel,
+    DeliveryStatus,
+    ReadyToSendDeliveryModel,
+)
 from src.workers.models.recipient import UserUnsubscriptionModel
 
 
@@ -58,3 +62,12 @@ class NotificationsRepository:
         return await self._db.pool.execute(
             queries.SET_DISTRIBUTIONS_STATUS, status, errors, delivery_id
         )
+
+    async def get_ready_to_send_deliveries(self, from_tz: int, to_tz: int):
+        data = await self._db.pool.fetch(  # type: ignore[union-attr]
+            queries.GET_READY_TO_SEND_DELIVERIES, from_tz, to_tz
+        )
+        return [
+            ReadyToSendDeliveryModel.parse_obj(item) if item else None
+            for item in data
+        ]
