@@ -55,7 +55,14 @@ async def test_delivery_trigger_starter_ok(
             mock,
         )
 
-    await delivery_trigger_starter_service.main()
+    deliveries = await delivery_trigger_starter_service.get_deliveries(
+        from_tz=-3, to_tz=12
+    )
+    for delivery in deliveries:
+        await delivery_trigger_starter_service.create_distribution(delivery)
+        await delivery_trigger_starter_service.send_message(
+            delivery.delivery_id
+        )
 
     data = await test_database.pool.fetch(
         """SELECT *
