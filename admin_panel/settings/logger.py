@@ -1,6 +1,6 @@
 from logging import config as logging_config
 
-from admin_panel.settings import settings
+from settings import settings
 
 
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

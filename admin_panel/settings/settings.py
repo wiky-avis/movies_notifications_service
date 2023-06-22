@@ -1,33 +1,37 @@
 from pydantic import BaseSettings, Field
 
-from admin_panel.settings.constants import TEST_PUBLIC_KEY
-
 
 class AppSettings(BaseSettings):
     host: str = Field(default="0.0.0.0")
-    port: int = Field(default=8000)
-
-
-class CacheSettings(BaseSettings):
-    url: str = Field(env="REDIS_URL", default="redis://redis:6379/0")
-    host: str = Field(env="REDIS_HOST", default="redis")
-    port: int = Field(env="REDIS_PORT", default=6379)
-    db: int = Field(env="REDIS_DB", default=0)
+    port: int = Field(default=8003)
 
 
 class DatabaseSettings(BaseSettings):
     url: str = Field(
-        default="postgres://app:123qwe@notifications_db:5432/notifications"
+        env="DATABASE_URL",
+        default="postgresql://app:123qwe@db:5432/notifications",
     )
     name: str = Field(env="POSTGRES_DB", default="notifications")
 
 
-class AuthSettings(BaseSettings):
-    secure_key: str = Field(
-        env="AUTH_SECURE_KEY", default="access_token_cookie"
+class TokenSettings(BaseSettings):
+    header: str = Field(
+        env="TOKEN_HEADER",
+        default="X-AUTH-TOKEN",
     )
-    jwt_algorithm: str = Field(env="JWT_ALGORITHM", default="RS256")
-    jwt_secret: str = Field(env="JWT_SECRET", default=TEST_PUBLIC_KEY)
+    token: str = Field(env="NOTIFICATIONS_ADMIN_SRV_TOKEN", default="test")
+
+
+class TemplatesSettings(BaseSettings):
+    host: str = Field(env="TEMPLATE_APP__HOST", default="0.0.0.0")
+    port: int = Field(env="TEMPLATE_APP__PORT", default=8002)
+    url: str = Field(env="TEMPLATE_APP__URL", default="https://0.0.0.0:8002")
+
+
+class DeliveriesSettings(BaseSettings):
+    host: str = Field(env="NA_APP_HOST", default="0.0.0.0")
+    port: int = Field(env="NA_APP_PORT", default=8001)
+    url: str = Field(env="TEMPLATE_APP__URL", default="https://0.0.0.0:8001")
 
 
 class AdminPanelSettings(BaseSettings):
@@ -35,8 +39,9 @@ class AdminPanelSettings(BaseSettings):
     log_format: str = Field(env="LOG_FORMAT", default="INFO")
     app: AppSettings = AppSettings()
     db: DatabaseSettings = DatabaseSettings()
-    cache: CacheSettings = CacheSettings()
-    auth: AuthSettings = AuthSettings()
+    token: TokenSettings = TokenSettings()
+    templates: TemplatesSettings = TemplatesSettings()
+    deliveries: DeliveriesSettings = DeliveriesSettings()
 
     class Config:
         env_file: str = ".env"

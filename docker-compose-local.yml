@@ -27,13 +27,9 @@ services:
       - DATABASE_URL=postgresql://app:123qwe@db:5432/notifications
       - DELIVERY_TRIGGER_STARTER_SENDER_AMQP_URL=amqp://user:pass@rabbitmq:5672/test
 
-  redis:
-    ports:
-      - '6379:6379'
-
   admin_panel:
     ports:
-      - "8000:8000"
+      - "8003:8003"
 
   templates_service:
     ports:
