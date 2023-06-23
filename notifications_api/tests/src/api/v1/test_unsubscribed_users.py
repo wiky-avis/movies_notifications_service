@@ -6,7 +6,7 @@ from src.common.repositories.notifications import NotificationsRepository
 from tests.vars.users import mock_unsubscribe_user
 
 
-async def test_create_delivery_ok(test_client, test_app):
+async def test_unsubscribed_user_ok(test_client, test_app):
     body = {
         "user_id": "f51f3683-7758-402e-9cf4-785f840d8738",
         "channel_type": ChannelType.EMAIL.value,
