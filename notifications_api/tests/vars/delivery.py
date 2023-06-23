@@ -55,12 +55,45 @@ def mock_create_delivery(
     return DeliveryResponse.parse_obj(row_data) if row_data else None
 
 
-def get_delivery_by_id():
-    pass
-
-
-def unsubscribe_user():
-    pass
+def mock_get_delivery_by_id(
+    delivery_id=1,
+    template_id=123,
+    recipient=None,
+    parameters=None,
+    channel="email",
+    type="not_night",
+    excluded=False,
+    exclude_reason=None,
+    sender="ugs_service",
+    created_dt=None,
+    updated_dt=None,
+    tz=None,
+):
+    row_data = dict(
+        delivery_id=delivery_id,
+        template_id=template_id,
+        channel=channel,
+        type=type,
+        excluded=excluded,
+        exclude_reason=exclude_reason,
+        sender=sender,
+        created_dt=created_dt,
+        updated_dt=updated_dt,
+        tz=tz,
+    )
+    if not recipient:
+        row_data["recipient"] = test_recipient
+    if not parameters:
+        row_data["parameters"] = test_parameters
+    if not created_dt:
+        row_data["created_dt"] = datetime.datetime(
+            2023, 6, 22, 7, 47, 38, 309810, tzinfo=datetime.timezone.utc
+        )
+    if not updated_dt:
+        row_data["updated_dt"] = datetime.datetime(
+            2023, 6, 22, 7, 47, 38, 309810, tzinfo=datetime.timezone.utc
+        )
+    return DeliveryResponse.parse_obj(row_data) if row_data else None
 
 
 def get_deliveries_response(

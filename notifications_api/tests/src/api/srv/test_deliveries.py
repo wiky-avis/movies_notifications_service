@@ -1,14 +1,12 @@
 from http import HTTPStatus
 from unittest import mock
 
-import pytest
 from src.common.repositories.notifications import NotificationsRepository
 from tests.vars.delivery import (
     get_deliveries_response,
     mock_create_delivery,
-    test_parameters,
+    mock_get_delivery_by_id,
 )
-from tests.vars.tables import NOTIFICATIONS_TABLES
 
 
 async def test_create_delivery_ok(test_client, test_app):
@@ -36,6 +34,25 @@ async def test_create_delivery_ok(test_client, test_app):
         notifications_service_mock
     ):
         response = await test_client.post("/api/srv/v1/deliveries", json=body)
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == get_deliveries_response()
+
+
+async def test_get_delivery_by_id_ok(test_client, test_app):
+    delivery_id = 1
+
+    test_client.headers["X-AUTH-TOKEN"] = "test"
+    notifications_service_mock = mock.AsyncMock(spec=NotificationsRepository)
+    notifications_service_mock.get_delivery_by_id.return_value = (
+        mock_get_delivery_by_id()
+    )
+    with test_app.container.notifications_service.override(
+        notifications_service_mock
+    ):
+        response = await test_client.get(
+            f"/api/srv/v1/deliveries/{delivery_id}"
+        )
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == get_deliveries_response()
