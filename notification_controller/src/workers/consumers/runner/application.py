@@ -3,8 +3,10 @@ import logging
 import aiomisc
 from src.common.base_consumer import BaseRunner
 from src.common.clients.auth_api import AuthApiClient
+from src.common.clients.template_api import TemplateApiClient
 from src.common.connectors.amqp import AMQPSenderPikaConnector
 from src.common.connectors.db import DbConnector
+from src.workers.consumers.email_consumer.consumer import EmailConsumer
 from src.workers.consumers.notifications_enricher_consumer.consumer import (
     NotificationsEnricherConsumer,
 )
@@ -19,11 +21,15 @@ class Runner(BaseRunner):
         db: DbConnector,
         auth_api_client: AuthApiClient,
         notifications_enricher_consumer: NotificationsEnricherConsumer,
+        template_api_client: TemplateApiClient,
+        email_consumer: EmailConsumer,
         amqp_sender: AMQPSenderPikaConnector,
     ):
         self._db = db
         self._auth_api_client = auth_api_client
         self._notifications_enricher_consumer = notifications_enricher_consumer
+        self._template_api_client = template_api_client
+        self._email_consumer = email_consumer
         self._amqp_sender = amqp_sender
 
     @property

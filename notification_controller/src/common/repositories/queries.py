@@ -4,6 +4,15 @@ GET_DELIVERY = """
     WHERE delivery_id=$1 and not excluded;
 """
 
+GET_DELIVERY_FOR_SEND = """
+    SELECT delivery_id, template_id, recipient, parameters, sender
+    FROM deliveries
+    WHERE 1=1
+    AND delivery_id=$1
+    AND not excluded
+    AND channel="email";
+"""
+
 SET_EXCLUDED_DELIVERY = """
     UPDATE deliveries SET excluded = true, exclude_reason = $1, updated_dt = now()
     WHERE delivery_id = $2;
@@ -20,11 +29,6 @@ GET_READY_TO_SEND_DELIVERIES = """
     FROM deliveries
     WHERE NOT excluded AND type = 'not_night' AND CAST(tz AS INTEGER) BETWEEN $1 AND $2
     ORDER BY created_dt;
-"""
-
-CREATE_DELIVERY_DISTRIBUTION = """
-    INSERT INTO delivery_distributions (delivery_id, recipient, status)
-    VALUES ($1, $2, $3) RETURNING id;
 """
 
 UPDATE_DELIVERY = """

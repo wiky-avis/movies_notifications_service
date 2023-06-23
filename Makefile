@@ -9,6 +9,7 @@ isort:
 
 mypy:
 	mypy notifications_api --explicit-package-bases
+	mypy admin_panel --explicit-package-bases
 	mypy templates_service --explicit-package-bases
 	mypy notification_controller --explicit-package-bases
 
