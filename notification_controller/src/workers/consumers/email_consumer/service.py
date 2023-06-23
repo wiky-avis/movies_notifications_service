@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from src.common.clients.email_provider_api import EmailProviderApiClient
 from src.common.clients.template_api import TemplateApiClient
 from src.common.exceptions import BadRequestError, ClientError, ServiceError
-from src.common.repositories.emails import EmailRepository
+from src.common.repositories.notifications import NotificationsRepository
 from src.workers.models.delivery import (
     DeliveryStatus,
     ReadyToSendDeliveryModel,
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class EmailService:
     def __init__(
         self,
-        repository: EmailRepository,
+        repository: NotificationsRepository,
         template_api_client: TemplateApiClient,
         email_provider_api_client: EmailProviderApiClient,
     ):

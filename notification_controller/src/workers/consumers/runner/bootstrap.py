@@ -10,7 +10,6 @@ from src.common.connectors.amqp import (
     resolve_amqp_sender_client,
 )
 from src.common.connectors.db import DbConnector
-from src.common.repositories.emails import EmailRepository
 from src.common.repositories.notifications import NotificationsRepository
 from src.workers.consumers.email_consumer.consumer import EmailConsumer
 from src.workers.consumers.email_consumer.service import EmailService
@@ -49,7 +48,6 @@ def resolve_resources(config: ConsumersConfig) -> punq.Container:
         factory=NotificationsEnricherConsumer,
         config=config.notifications_enricher_consumer,
     )
-    container.register(service=EmailRepository)
     container.register(service=EmailService)
     container.register(
         service=EmailConsumer,
