@@ -47,3 +47,7 @@ CRUD сервис для работы с шаблонами.
 
 # Схемы в C4 нотации
 Их можно найти в папке docs.
+## C1
+![Alt text](docs/to_be/c4/img/C1___TO_BE.png "C1")
+## C2
+![Alt text](docs/to_be/c4/img/C2___TO_BE.png "C1")
