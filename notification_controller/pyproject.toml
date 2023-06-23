@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = [""]
 readme = "README.md"
-packages = [{include = "notification_controller"}]
+packages = []
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -28,6 +28,7 @@ respx = "0.20.1"
 black = "23.3.0"
 isort = "5.12.0"
 flake8 = "6.0.0"
+mypy = "1.4.0"
 
 [build-system]
 requires = ["poetry-core"]

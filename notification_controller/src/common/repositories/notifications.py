@@ -8,6 +8,7 @@ from src.workers.models.delivery import (
     DeliveryStatus,
     ReadyToSendDeliveryModel,
 )
+from src.workers.models.emails import EmailForSend
 from src.workers.models.recipient import UserUnsubscriptionModel
 
 
@@ -23,6 +24,12 @@ class NotificationsRepository:
             queries.GET_DELIVERY, delivery_id
         )
         return DeliveryModel.parse_obj(row_data) if row_data else None
+
+    async def get_delivery_for_send(self, delivery_id: int) -> EmailForSend:
+        row_data = await self._db.pool.fetchrow(  # type: ignore[union-attr]
+            queries.GET_DELIVERY_FOR_SEND, delivery_id
+        )
+        return EmailForSend.parse_obj(row_data) if row_data else None
 
     async def set_excluded_delivery(
         self, exclude_reason: str, delivery_id: int

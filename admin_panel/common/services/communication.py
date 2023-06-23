@@ -81,7 +81,7 @@ class ServiceCommunicator:
                 delivery_id = response_dict.get("delivery_id")
                 return True, f"Шаблон успешно создан, id {delivery_id}"
             else:
-                return False, response_dict.get("detail")
+                return False, response_dict.get("detail")  # type: ignore
         except RequestException as ex:
             return False, str(ex)
 
@@ -96,6 +96,6 @@ class ServiceCommunicator:
             if status == HTTPStatus.OK:
                 return True, "Шаблон успешно создан"
             else:
-                return False, response_dict.get("detail")
+                return False, response_dict.get("detail")  # type: ignore
         except RequestException as ex:
             return False, str(ex)
