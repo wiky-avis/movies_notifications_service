@@ -1,7 +1,6 @@
 import abc
 import asyncio
 import logging
-from typing import Optional
 
 import aio_pika
 import ujson  # type: ignore[import]
@@ -60,8 +59,8 @@ class AMQPSenderPika(AMQPBase):
         super().__init__(settings)
 
         self.exchange = settings.get("exchange")
-        self._connection: Optional[aio_pika.connection.Connection] = None
-        self._channel: Optional[aio_pika.channel.Channel] = None
+        self._connection: aio_pika.connection.Connection | None = None
+        self._channel: aio_pika.channel.Channel | None = None
         self._is_alive = False
         self.robust_timeout = settings.get("robust_timeout") or ROBUST_TIMEOUT
         self.exchanges: dict[str, aio_pika.Exchange] = dict()

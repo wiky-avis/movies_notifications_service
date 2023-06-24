@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Generic, List, Optional, TypeVar, Union
+from typing import Generic, List, TypeVar, Union
 
 from pydantic.generics import GenericModel
 
@@ -9,8 +9,8 @@ DataT = TypeVar("DataT")
 
 class ApiResponse(GenericModel, Generic[DataT]):
     success: bool
-    result: Optional[DataT]
-    errors: Optional[List[Union[str, dict]]]
+    result: DataT | None
+    errors: List[Union[str, dict]] | None
 
 
 def wrap_response(view):

@@ -9,7 +9,12 @@ from src.containers import Container
 router = APIRouter()
 
 
-@router.post("/users/unsubscribe", response_model=ApiResponse)
+@router.post(
+    "/users/unsubscribe",
+    summary="Отписка пользователя от коммуникации",
+    description="Отписывает переданного пользователя от коммуникации",
+    response_model=ApiResponse,
+)
 @inject
 @wrap_response
 async def unsubscribe_user(
@@ -18,4 +23,8 @@ async def unsubscribe_user(
         Provide[Container.user_subscription_service]
     ),
 ):
+    """
+    Создает запись в БД в таблице с отписанными пользователями.
+    Далее по ней будут фильтроваться отправки.
+    """
     return await user_subscription_service.unsubscribe_user(body)

@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 from asyncpg import UniqueViolationError
 from src.api.models.delivery import DeliveryModel, DeliveryResponse
@@ -18,7 +17,7 @@ class NotificationsRepository:
 
     async def create_delivery(
         self, data: DeliveryModel
-    ) -> Optional[DeliveryResponse]:
+    ) -> DeliveryResponse | None:
         parameters = {
             parameter["name"]: parameter["value"]
             for parameter in data.parameters
@@ -47,7 +46,7 @@ class NotificationsRepository:
 
     async def get_delivery_by_id(
         self, delivery_id: int
-    ) -> Optional[DeliveryResponse]:
+    ) -> DeliveryResponse | None:
         row_data = await self._db.pool.fetchrow(  # type: ignore[union-attr]
             queries.GET_DELIVERY, delivery_id
         )

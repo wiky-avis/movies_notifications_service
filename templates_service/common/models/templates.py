@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, Optional
+from typing import Dict
 
 from pydantic import BaseModel, Field
 
@@ -17,11 +17,11 @@ class DeliveryChannel(str, Enum):
 
 
 class NotificationTemplate(BaseModel):
-    template_id: Optional[int] = None
+    template_id: int | None = None
     template_name: str
     template_body: str
-    description: Optional[str] = None
-    mandatory_parameters: Optional[list[str]] = None
-    optional_parameters: Optional[Dict[str, str]] = None
+    description: str | None = None
+    mandatory_parameters: list[str] | None = None
+    optional_parameters: Dict[str, str] | None = None
     channel: DeliveryChannel
     type_: DeliveryType = Field(alias="type", default=DeliveryType.REGULAR)

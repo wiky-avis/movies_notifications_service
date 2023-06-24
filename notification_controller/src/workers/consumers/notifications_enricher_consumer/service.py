@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 import dpath
 from pydantic import ValidationError
@@ -94,7 +93,7 @@ class NotificationsEnricherService:
             delivery_data.recipient, tz, delivery_data.delivery_id
         )
 
-    async def get_user_info(self, user_id: str) -> Optional[dict]:
+    async def get_user_info(self, user_id: str) -> dict | None:
         try:
             user = await self._auth_api_client.get_user_by_id(user_id)
         except (BadRequestError, ServiceError, ClientError):
@@ -129,7 +128,7 @@ class NotificationsEnricherService:
     @staticmethod
     def _load_model(  # type: ignore
         body: bytes,
-    ) -> Optional[DeliveryEventModel]:
+    ) -> DeliveryEventModel | None:
         try:
             return DeliveryEventModel.parse_raw(body)
         except ValidationError:

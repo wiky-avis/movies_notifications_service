@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Optional
 
 from src.api.models.base import ORDJSONModelMixin
 
@@ -12,4 +11,4 @@ class ChannelType(str, Enum):
 class UserSubscriptionInput(ORDJSONModelMixin):
     user_id: str
     channel_type: ChannelType = ChannelType.EMAIL
-    reason: Optional[str] = None
+    reason: str | None = None

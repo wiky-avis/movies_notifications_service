@@ -9,7 +9,7 @@ class AppSettings(BaseSettings):
 class DatabaseSettings(BaseSettings):
     url: str = Field(
         env="DATABASE_URL",
-        default="postgresql://app:123qwe@db:5432/notifications",
+        default="postgresql://login:password@db:5432/notifications",
     )
     name: str = Field(env="POSTGRES_DB", default="notifications")
 

@@ -1,6 +1,5 @@
 from datetime import datetime
 from enum import Enum
-from typing import Optional
 
 from pydantic import BaseModel
 
@@ -29,15 +28,15 @@ class DeliveryChannel(str, Enum):
 
 class DeliveryModel(BaseModel):
     delivery_id: int
-    template_id: Optional[int] = None
-    recipient: Optional[dict] = None
-    channel: Optional[DeliveryChannel] = None
-    parameters: Optional[dict] = None
-    type: Optional[DeliveryType] = None
-    sender: Optional[str] = None
-    status: Optional[str] = None
-    created_dt: Optional[datetime] = None
-    updated_dt: Optional[datetime] = None
+    template_id: int | None = None
+    recipient: dict | None = None
+    channel: DeliveryChannel | None = None
+    parameters: dict | None = None
+    type: DeliveryType | None = None
+    sender: str | None = None
+    status: str | None = None
+    created_dt: datetime | None = None
+    updated_dt: datetime | None = None
 
 
 class ExcludeReasonEnum(str, Enum):
@@ -56,4 +55,4 @@ class DeliveryStatus(str, Enum):
 
 class ReadyToSendDeliveryModel(BaseModel):
     delivery_id: int
-    recipient: Optional[dict] = None
+    recipient: dict | None = None

@@ -1,6 +1,5 @@
 import logging
 from http import HTTPStatus
-from typing import Optional
 
 from pydantic import ValidationError
 from src.common.clients.email_provider_api import EmailProviderApiClient
@@ -124,7 +123,7 @@ class EmailService:
     @staticmethod
     def _load_model(
         body: bytes,
-    ) -> Optional[ReadyToSendDeliveryModel]:
+    ) -> ReadyToSendDeliveryModel | None:
         try:
             return ReadyToSendDeliveryModel.parse_raw(body)
         except ValidationError:

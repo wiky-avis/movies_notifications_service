@@ -1,6 +1,5 @@
 import logging
 from http import HTTPStatus
-from typing import Optional
 
 from fastapi import HTTPException
 from src.api.models.delivery import DeliveryModel, DeliveryResponse, EventType
@@ -25,7 +24,7 @@ class NotificationsService:
 
     async def create_delivery(
         self, data: DeliveryModel
-    ) -> Optional[DeliveryResponse]:
+    ) -> DeliveryResponse | None:
         try:
             delivery = await self._repository.create_delivery(data)
         except DatabaseError:
@@ -55,7 +54,7 @@ class NotificationsService:
 
     async def get_delivery_by_id(
         self, delivery_id: int
-    ) -> Optional[DeliveryResponse]:
+    ) -> DeliveryResponse | None:
         delivery = await self._repository.get_delivery_by_id(delivery_id)
         if not delivery:
             logger.warning(
