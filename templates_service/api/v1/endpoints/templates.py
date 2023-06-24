@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Optional
+from typing import Any
 
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Body, Depends, Header, HTTPException
@@ -56,9 +56,7 @@ router = APIRouter()
 )
 @inject
 async def create_template(
-    token_header: Optional[str] = Header(
-        None, alias=settings.auth.token_header
-    ),
+    token_header: str | None = Header(None, alias=settings.auth.token_header),
     body: CreateTemplateIn = Body(...),
     templates_service: TemplatesService = Depends(
         Provide[Container.notifications_service]
@@ -111,9 +109,7 @@ async def create_template(
     },
 )
 async def update_template(
-    token_header: Optional[str] = Header(
-        None, alias=settings.auth.token_header
-    ),
+    token_header: str | None = Header(None, alias=settings.auth.token_header),
     body: UpdateTemplateIn = Body(...),
     templates_service: TemplatesService = Depends(
         Provide[Container.notifications_service]
@@ -166,9 +162,7 @@ async def update_template(
 )
 async def delete_template(
     template_id: int,
-    token_header: Optional[str] = Header(
-        None, alias=settings.auth.token_header
-    ),
+    token_header: str | None = Header(None, alias=settings.auth.token_header),
     templates_service: TemplatesService = Depends(
         Provide[Container.notifications_service]
     ),
@@ -210,9 +204,7 @@ async def delete_template(
     },
 )
 async def get_template(
-    token_header: Optional[str] = Header(
-        None, alias=settings.auth.token_header
-    ),
+    token_header: str | None = Header(None, alias=settings.auth.token_header),
     body: GetTemplateIn = Body(...),
     templates_service: TemplatesService = Depends(
         Provide[Container.notifications_service]
@@ -265,9 +257,7 @@ async def get_template(
     },
 )
 async def render_template(
-    token_header: Optional[str] = Header(
-        None, alias=settings.auth.token_header
-    ),
+    token_header: str | None = Header(None, alias=settings.auth.token_header),
     body: RenderTemplateIn = Body(...),
     templates_service: TemplatesService = Depends(
         Provide[Container.notifications_service]

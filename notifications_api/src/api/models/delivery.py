@@ -1,6 +1,5 @@
 from datetime import datetime
 from enum import Enum
-from typing import Optional
 
 from pydantic import Field
 from src.api.models.base import ORDJSONModelMixin
@@ -35,7 +34,7 @@ class DeliveryChannel(str, Enum):
 
 class Recipient(TypedDict, total=False):
     user_id: str
-    email: Optional[str]
+    email: str | None
 
 
 class ObjectParameter(TypedDict):
@@ -50,18 +49,18 @@ class DeliveryModel(ORDJSONModelMixin):
     channel: DeliveryChannel
     type_: DeliveryType = Field(alias="type")
     sender: str
-    created_dt: Optional[datetime] = None
-    updated_dt: Optional[datetime] = None
+    created_dt: datetime | None = None
+    updated_dt: datetime | None = None
 
 
 class DeliveryResponse(ORDJSONModelMixin):
     delivery_id: int
-    template_id: Optional[int] = None
-    recipient: Optional[Recipient] = None
-    channel: Optional[DeliveryChannel] = None
-    parameters: Optional[dict] = None
-    type: Optional[DeliveryType] = None
-    sender: Optional[str] = None
-    status: Optional[DeliveryStatus] = None
-    created_dt: Optional[datetime] = None
-    updated_dt: Optional[datetime] = None
+    template_id: int | None = None
+    recipient: Recipient | None = None
+    channel: DeliveryChannel | None = None
+    parameters: dict | None = None
+    type: DeliveryType | None = None
+    sender: str | None = None
+    status: DeliveryStatus | None = None
+    created_dt: datetime | None = None
+    updated_dt: datetime | None = None

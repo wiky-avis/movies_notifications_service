@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 import asyncpg
 import ujson  # type: ignore[import]
@@ -38,7 +37,7 @@ async def get_db():
 
 
 class DbConnector:
-    pool: Optional[Pool] = None
+    pool: Pool | None = None
 
     @staticmethod
     async def connect():

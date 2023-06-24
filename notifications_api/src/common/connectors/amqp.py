@@ -1,11 +1,9 @@
-from typing import Optional
-
 from src.common.clients.amqp_sender import AMQPSenderPika
 from src.settings import notifications_amqp_settings
 
 
 class AMQPSenderPikaConnector:
-    amqp_sender: Optional[AMQPSenderPika] = None
+    amqp_sender: AMQPSenderPika | None = None
 
     @classmethod
     async def setup(cls):

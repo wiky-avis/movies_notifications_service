@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from pydantic import BaseModel, Field
 
@@ -23,18 +23,18 @@ class SearchField(str, Enum):
 class CreateTemplateIn(BaseModel):
     template_name: str
     template_body: str
-    description: Optional[str] = None
+    description: str | None = None
     channel: DeliveryChannel
     type_: DeliveryType = Field(alias="type", default=DeliveryType.REGULAR)
 
 
 class UpdateTemplateIn(BaseModel):
     template_id: int
-    template_name: Optional[str] = None
-    template_body: Optional[str] = None
-    description: Optional[str] = None
-    channel: Optional[DeliveryChannel] = None
-    type_: Optional[DeliveryType] = Field(alias="type", default=None)
+    template_name: str | None = None
+    template_body: str | None = None
+    description: str | None = None
+    channel: DeliveryChannel | None = None
+    type_: DeliveryType | None = Field(alias="type", default=None)
 
 
 class GetTemplateIn(BaseModel):

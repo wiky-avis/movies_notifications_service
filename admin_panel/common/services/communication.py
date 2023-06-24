@@ -1,6 +1,5 @@
 import logging
 from http import HTTPStatus
-from typing import Optional
 
 import aiohttp
 from aiohttp.client_exceptions import ClientConnectorError
@@ -28,8 +27,8 @@ class ServiceCommunicator:
         method: RequestMethod,
         url: str,
         path: str,
-        json_data: Optional[dict] = None,
-        headers: Optional[dict] = None,
+        json_data: dict | None = None,
+        headers: dict | None = None,
     ) -> tuple[int, dict]:
         if not json_data:
             json_data = {}

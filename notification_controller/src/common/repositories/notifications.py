@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 from src.common.connectors.db import DbConnector
 from src.common.repositories import queries
@@ -64,7 +63,7 @@ class NotificationsRepository:
         )
 
     async def set_delivery_distribution_status(
-        self, status: str, delivery_id: int, errors: Optional[dict] = None
+        self, status: str, delivery_id: int, errors: dict | None = None
     ):
         return await self._db.pool.execute(
             queries.SET_DISTRIBUTIONS_STATUS, status, errors, delivery_id

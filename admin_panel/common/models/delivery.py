@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import Enum
-from typing import Optional, TypedDict
+from typing import TypedDict
 
 from pydantic import BaseModel, Field
 
@@ -19,7 +19,7 @@ class DeliveryType(str, Enum):
 
 class Recipient(TypedDict, total=False):
     user_id: str
-    email: Optional[str]
+    email: str | None
 
 
 class ObjectParameter(TypedDict):
@@ -34,5 +34,5 @@ class DeliveryModel(BaseModel):
     channel: DeliveryChannel
     type_: DeliveryType = Field(alias="type")
     sender: str
-    created_dt: Optional[datetime] = None
-    updated_dt: Optional[datetime] = None
+    created_dt: datetime | None = None
+    updated_dt: datetime | None = None

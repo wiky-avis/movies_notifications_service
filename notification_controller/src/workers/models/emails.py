@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pydantic import BaseModel
 
 
@@ -12,5 +10,5 @@ class EmailForSend(BaseModel):
     delivery_id: int
     template_id: int
     recipient: EmailRecipient
-    parameters: Optional[dict] = {}
+    parameters: dict | None = {}
     sender: str

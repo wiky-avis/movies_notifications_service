@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pydantic import BaseModel
 
 from templates_service.common.models.templates import NotificationTemplate
@@ -16,8 +14,8 @@ class HTTPErrorResponse(BaseModel):
 
 class TemplateOut(BaseModel):
     status: str
-    template_id: Optional[int] = None
-    details: Optional[str] = None
+    template_id: int | None = None
+    details: str | None = None
 
 
 class TemplatesListing(BaseModel):

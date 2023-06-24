@@ -1,5 +1,4 @@
 from http import HTTPStatus
-from typing import Optional
 
 from asyncpg import UniqueViolationError
 from fastapi import HTTPException
@@ -17,7 +16,7 @@ class UserSubscriptionService:
 
     async def unsubscribe_user(
         self, data: UserSubscriptionInput
-    ) -> Optional[str]:
+    ) -> str | None:
         try:
             await self._repository.unsubscribe_user(data)
         except UniqueViolationError:

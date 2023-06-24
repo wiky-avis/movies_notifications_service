@@ -1,10 +1,8 @@
-from typing import Optional
-
 from src.common.clients.amqp_sender import AMQPSenderPika
 
 
 class AMQPSenderPikaConnector:
-    amqp_sender: Optional[AMQPSenderPika] = None
+    amqp_sender: AMQPSenderPika | None = None
 
     def __init__(self, config: dict):
         self._settings = config
